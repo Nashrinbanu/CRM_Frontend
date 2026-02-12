@@ -1,0 +1,60 @@
+<div class="whatsapp-ui">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="title">Messages</div>
+      <input type="text" placeholder="Search or start new chat" [(ngModel)]="searchQuery" class="search-input" />
+    </div>
+
+    <div class="contacts-list">
+      <div class="contact-item" *ngFor="let c of contacts" (click)="selectContact(c)"
+        [class.active]="selectedContact?.id === c.id"
+        [hidden]="searchQuery && c.name.toLowerCase().indexOf(searchQuery.toLowerCase()) === -1">
+        <div class="avatar">{{ c.name.charAt(0) }}</div>
+        <div class="meta">
+          <div class="row">
+            <div class="name">{{ c.name }}</div>
+            <div class="time">{{ c.lastSeen }}</div>
+          </div>
+          <div class="last-msg">{{ c.lastMessage }}</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="chat-area" *ngIf="selectedContact; else noChat">
+    <header class="chat-header">
+      <div class="left">
+        <div class="avatar large">{{ selectedContact?.name.charAt(0) }}</div>
+        <div class="contact-info">
+          <div class="name">{{ selectedContact?.name }}</div>
+          <div class="status">{{ selectedContact?.status }}</div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="icon">⋮</button>
+      </div>
+    </header>
+
+    <div class="messages" #scrollContainer>
+      <div *ngFor="let m of messages; let i = index" class="message-row"
+        [ngClass]="{'sent': m.sender === 'user', 'received': m.sender !== 'user'}">
+        <div class="bubble">
+          <div class="text">{{ m.text }}</div>
+          <div class="meta">{{ m.time || ('now') }}</div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="chat-input">
+      <textarea [(ngModel)]="userMessage" placeholder="Type a message"
+        (keydown.enter)="sendMessage(); $event.preventDefault();"></textarea>
+      <button class="send-btn" (click)="sendMessage()">Send</button>
+    </footer>
+  </section>
+
+  <ng-template #noChat>
+    <div class="no-chat">
+      <div class="empty">Select a contact to start chatting</div>
+    </div>
+  </ng-template>
+</div>

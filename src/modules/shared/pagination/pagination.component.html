@@ -1,0 +1,42 @@
+<div class="paginator-container">
+  <div class="page-size-selector  ms-2">
+    <mat-label class="pageSize details me-2">Results per page</mat-label>
+    <mat-form-field appearance="outline" class="custom-form-field">
+      <mat-select [(ngModel)]="pageSize" (selectionChange)="onPageSizeChange($event.value)"
+        panelClass="custom-scrollbar">
+        <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
+          {{ size }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <span class="ml-2 details"> &nbsp;
+      {{ pageIndex * pageSize + 1 }} - {{ (pageIndex + 1) * pageSize > totalCount ? totalCount : (pageIndex +
+      1) * pageSize }} of {{ totalCount }} Items
+    </span>
+  </div>
+  <div class="custom-pagination flex items-center gap-2">
+    <button class="pagination-button" (click)="previousPage()" *ngIf="pageIndex > 0">
+      <img class="pagination-arrow" src="../../../assets/lead/Back 1.svg" alt="Previous" />
+    </button>
+    <button class="pagination-button" (click)="setPage(1)" [disabled]="pageIndex === 0">
+      1
+    </button>
+    <button *ngIf="pageIndex > 2" class="pagination-button disabled" style="cursor: auto">
+      ....
+    </button>
+    <button *ngFor="let page of getPages()" class="pagination-button" (click)="setPage(page)"
+      [disabled]="page === pageIndex + 1">
+      {{ page }}
+    </button>
+    <button *ngIf="pageIndex < totalPages - 3" class="pagination-button disabled" style="cursor: auto">
+      ....
+    </button>
+    <button class="pagination-button" (click)="setPage(totalPages)" *ngIf="totalPages > 1"
+      [disabled]="pageIndex === totalPages - 1">
+      {{ totalPages }}
+    </button>
+    <button class="pagination-button" (click)="nextPage()" *ngIf="pageIndex < totalPages - 1">
+      <img class="pagination-arrow" src="../../../assets/lead/Back (3).svg" alt="Next" />
+    </button>
+  </div>
+</div>

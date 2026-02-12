@@ -1,0 +1,296 @@
+<div *ngIf="isLoading; else content">
+  <div class="animate-pulse">
+    <div class="p-4 rounded-lg bg-transparent">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 p-3">
+        <div class="flex flex-row items-center justify-between w-full md:w-auto md:flex-none">
+          <div class="bg-gray-300 h-8 w-48 rounded-full shimmer-wave"></div>
+          <button class="md:hidden bg-gray-300 h-10 w-24 rounded-full shimmer-wave"></button>
+        </div>
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+          <div class="flex flex-row items-center gap-2 w-full md:w-auto">
+            <div class="relative w-full md:w-48">
+              <div class="bg-gray-300 h-10 w-full rounded-full shimmer-wave "></div>
+            </div>
+            <button class="bg-gray-300 h-10 w-10 rounded-full shimmer-wave "></button>
+            <button class="bg-gray-300 h-10 w-28 rounded-full shimmer-wave "></button>
+            <div class="relative w-full md:w-auto">
+              <button class="bg-gray-300 h-10 w-28 rounded-full shimmer-wave "></button>
+            </div>
+          </div>
+          <button class="hidden md:flex bg-gray-300 h-10 w-28 rounded-full shimmer-wave "></button>
+        </div>
+      </div>
+      <div
+        class="rounded-2xl border border-white p-4 shadow-[0px_3.83px_3.83px_0px_#D1E1FF14] backdrop-blur-[382.83px] bg-[#FFFFFF4D]">
+        <div class="overflow-x-auto">
+          <table class="w-full bg-transparent hidden lg:table">
+            <thead>
+              <tr>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-16 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-48 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full shimmer-wave"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full shimmer-wave"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]">
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-8 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-48 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lg:hidden">
+            <div *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"
+              class="rounded-lg p-2 mb-2">
+              <div class="flex justify-between items-center w-full">
+                <div class="flex items-center gap-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full shimmer-wave"></div>
+                  <div class="bg-gray-300 h-4 w-16 rounded-full shimmer-wave"></div>
+                </div>
+                <div class="bg-gray-300 h-4 w-8 rounded-full shimmer-wave"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content>
+  <div class="p-4 rounded-lg bg-transparent">
+    <div class=" flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 p-3">
+      <div class="flex flex-row items-center justify-between w-full md:w-auto md:flex-none">
+        <div class=" text-3xl font-semibold leading-10 text-left">Leads</div>
+        <button
+          class=" md:hidden flex items-center justify-center border border-white bg-white bg-opacity-50 rounded-[107px] px-3 py-2.5 text-sm font-medium leading-4 text-center hover:bg-opacity-70 transition-all"
+          (click)="addLead()">
+          <img src="assets/lead/Add (1).svg" class="ml-2" alt="Add Icon">
+          <div class="pt-0.5 pl-1.5">Add Lead</div>
+        </button>
+      </div>
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+        <div class="flex flex-row items-center gap-2 w-full md:w-auto">
+          <div class=" relative w-full md:w-48">
+            <input id="companyName"
+              class="w-full px-3 py-2 border border-gray-300 rounded-full bg-white bg-opacity-50 hover:bg-opacity-70 transition-all duration-300 text-gray-700 focus:outline-none focus:ring-0 focus:ring-gray-300"
+              [class.expanded]="isSearchOpen" [class.opacity-0]="!isSearchOpen" [class.w-0]="!isSearchOpen" type="text"
+              placeholder="Search Company Name" [(ngModel)]="filterCompanyName" (keyup.enter)="onFilterChange()"
+              (blur)="collapseSearch()" />
+            <button *ngIf="filterCompanyName && isSearchOpen" (click)="onFilterChange()"
+              class=" absolute right-2 top-2 p-1 hover:bg-gray-100 rounded-full transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zm-5.442 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+              </svg>
+            </button>
+          </div>
+          <!-- <button *ngIf="!isSearchOpen" (click)="expandSearch()"
+            class=" p-2 hover:bg-gray-100 rounded-full transition-all">
+            <img src="../../../../assets/New-Icons/NewSearch.svg" class="h-5 w-5 " />
+          </button> -->
+          <button
+            class="icon-button text-white relative flex items-center pl-[0.1rem] border border-white rounded-full bg-white/50 transition-all duration-300 ease-in-out w-10 h-10 cursor-pointer overflow-hidden hover:bg-[#1C0D0D] hover:border-[#1C0D0D] hover:w-28 hover:justify-start group">
+            <button #filterBtn (click)="importLead()" class="group flex items-center justify-center gap-1 p-3 rounded-md bg-transparent 
+                  transition-all duration-300 ease-in-out min-w-fit ">
+              <img src="../../../../assets/lead/Vector.svg" class="h-4 w-4 transition-all duration-300 ease-in-out
+                group-hover:filter group-hover:invert group-hover:scale-110" />
+              <span
+                class="whitespace-nowrap text-white text-md font-medium text-left no-underline py-1.5 px-3 z-10 transition-all 
+               duration-300 ease-in-out opacity-100 scale-80 origin-left-center group-hover:opacity-100 group-hover:visible group-hover:scale-100">
+                Import
+              </span>
+            </button>
+          </button>
+          <button
+            class="icon-button text-white relative flex items-center pl-[0.1rem] border border-white rounded-full bg-white/50 transition-all duration-300 ease-in-out w-10 h-10 cursor-pointer overflow-hidden hover:bg-[#1C0D0D] hover:border-[#1C0D0D] hover:w-28 hover:justify-start group"
+            (click)="toggleFilter()">
+            <button #filterBtn (click)="openLeadFilter(filterBtn)" class="group flex items-center justify-center gap-1 p-3 rounded-md bg-transparent 
+                    transition-all duration-300 ease-in-out min-w-fit ">
+              <img src="../../../../assets/lead/Inactive-Filter Button.svg" class="h-4 w-4 transition-all duration-300 ease-in-out
+                  group-hover:filter group-hover:invert group-hover:scale-110" />
+              <span
+                class="whitespace-nowrap text-white text-md font-medium text-left no-underline py-1.5 px-3 z-10 transition-all 
+                 duration-300 ease-in-out opacity-100 scale-80 origin-left-center group-hover:opacity-100 group-hover:visible group-hover:scale-100">
+                Filter
+              </span>
+            </button>
+          </button>
+
+          <!-- <div class="relative w-full md:w-auto">
+            <button (click)="isDropdownOpen = !isDropdownOpen"
+              class=" justify-center border border-white bg-white bg-opacity-50 rounded-[107px] px-3 flex py-2.5 text-sm font-medium leading-4 text-center hover:bg-opacity-70 transition-all">
+              <span class="mt-0.5">{{ selectedStatus || 'All Status' }}</span>
+              <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                [ngClass]="{'rotate-180': isDropdownOpen}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div *ngIf="isDropdownOpen" class="fixed mt-2 w-60 bg-white border border-gray-200 rounded-lg shadow-lg 
+          overflow-y-auto max-h-60 z-50 
+          scrollbar-thin scrollbar-w-[4px] scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+              <div class="py-2">
+                <div *ngFor="let status of statuses" (click)="selectStatus(status)"
+                  class="px-4 py-2 hover:bg-black-100 cursor-pointer hover:bg-black hover:text-white">
+                  {{ status.label }}
+                </div>
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <button
+          class=" hidden md:flex items-center justify-center border border-white bg-white bg-opacity-50 rounded-[107px] px-4 py-2.5 text-sm font-medium leading-4 text-center hover:bg-opacity-70 transition-all"
+          (click)="addLead()">
+          <img src="assets/lead/Add (1).svg" alt="Add Icon">
+          <div class="pt-0.5 pl-1.5">Add Lead</div>
+        </button>
+      </div>
+    </div>
+    <div class=" rounded-2xl border border-white p-4 sm:p-3 md:p-3 lg:p-4 xl:p-4 xxl:p-4   shadow-[0px_3.83px_3.83px_0px_#D1E1FF14] 
+            backdrop-blur-[382.83px] 
+            border border-transparent 
+            bg-[#FFFFFF4D] 
+            [border-image-source:linear-gradient(107.21deg,#FFFFFF_-0.65%,#FFFFFF_93.23%)] 
+            [border-image-slice:1] ">
+      <div class="table-wrapper flex flex-col min-h-[600px] overflow-x-auto ">
+        <table class="w-full bg-transparent shadow-none rounded-lg overflow-hidden hidden lg:table" *ngIf="!isLoading">
+          <thead>
+            <tr>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">S.No</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Lead ID</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Lead Name</th>
+              <!-- <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Contact Person</th> -->
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Mobile Number</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Email</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Score</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Created Date</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lead of dataSource.data; let i = index" class="" (click)="viewLead(lead?.id)">
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ pageIndex * pageSize + i + 1 }}
+              </td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">LEAD-{{ lead.id }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ lead.company_name }}</td>
+              <!-- <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ lead.contacts[0]?.name }}</td> -->
+              <td class="py-3.5   font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ lead.company_mobile_number }}
+              </td>
+              <td class="py-3.5   font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ lead.company_email }}</td>
+              <td class="py-3.5   font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ lead.score }}%</td>
+              <td class="py-3.5   font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ lead.created_at | date:
+                'dd/MM/yyyy' }}</td>
+              <td class="py-3.5 text-sm font-[400] text-[#1C0D0D] cursor-pointer">
+                <span [ngClass]="getStatusClass(lead.lead_opportunity)"
+                  class="status-label w-24 h-8 flex items-center justify-center px-3 py-2 rounded-full text-xs font-[600] transition-colors duration-300">
+                  {{ toTitleCase(lead.lead_opportunity) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="lg:hidden" *ngIf="!isLoading">
+          <div *ngFor="let lead of dataSource.data" class="rounded-lg p-2 mb-2 ">
+            <div (click)="toggleDetails(lead)" class="cursor-pointer flex justify-between items-center w-full">
+              <div class="flex items-center">
+                <div class=" text-sm text-[#1C0D0D] ">{{ lead.company_name }}</div> -
+                <div class=" text-sm text-[#1C0D0D] ">({{ lead.id }})</div>
+              </div>
+              <div class="text-right">
+                <svg *ngIf="!lead.showDetails" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                </svg>
+                <svg *ngIf="lead.showDetails" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" />
+                </svg>
+              </div>
+            </div>
+            <div *ngIf="lead.showDetails" class="mt-2" (click)="viewLead(lead?.id)">
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Contact:</strong> {{
+                lead.contact_person_name }}</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Mobile:</strong> {{
+                lead.company_mobile_number }}</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Email:</strong> {{ lead.company_email }}
+              </div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Score:</strong> {{ lead.score }}%</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Created Date:</strong> {{ lead.created_at
+                | date: 'dd/MM/yyyy' }}</div>
+              <div class="text-sm text-[#1C0D0D] py-2 d-flex">
+                <strong>Status:</strong>
+                <span [ngClass]="getStatusClass(lead.lead_opportunity)"
+                  class="status-label w-24 h-8 flex items-center justify-center px-3 py-2 ml-2 rounded-full text-xs font-bold transition-colors duration-300">
+                  {{ toTitleCase(lead.lead_opportunity) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-auto">
+
+          <app-pagination *ngIf="totalCount >= pageSize && !isLoading" [totalCount]="totalCount" [pageSize]="pageSize"
+            [pageIndex]="pageIndex" [totalPages]="totalPages" (pageChange)="onPageChange($event)"></app-pagination>
+        </div>
+
+
+        <app-data-loading-bar [columns]="displayedColumns" *ngIf="isLoading"></app-data-loading-bar>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-import-leads-modals *ngIf="showImportModals" (closed)="closeImportModals()"
+  (importSuccess)="onImportSuccess($event)"></app-import-leads-modals>

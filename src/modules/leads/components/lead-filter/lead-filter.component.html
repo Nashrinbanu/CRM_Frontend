@@ -1,0 +1,151 @@
+<div class="p-3 rounded-xl 
+bg-gradient-to-r  from-[#f4f0ea] to-[#fbf9f6]
+            border-2 border-white 
+            backdrop-blur-[144.8px] 
+            shadow-[8px_4px_17.8px_14px_rgba(136,136,136,0.25)] 
+            transition-transform duration-300 filter-panel overflow-y-auto">
+  <div class="flex items-center justify-between">
+    <h2 class="text-[#1C0D0D] text-xl font-bold leading-none tracking-normal align-middle">
+      Filters
+    </h2>
+    <div class="flex items-center pb-3 ">
+      <button type="button"
+        class="bg-transparent px-2 rounded  text-[#625C5C] font-[500] text-sm leading-none tracking-normal align-middle"
+        (click)="resetFilters()">
+        Reset
+      </button>
+      <button type="button" (click)="close()" class=" ms-2 cursor-pointer">
+        <span>
+          <img src="assets/lead/close-button.svg" class="w-6 h-6" />
+        </span>
+      </button>
+    </div>
+  </div>
+  <div class="space-y-3 2xl:space-y-4  mt-2 ">
+    <div>
+      <label class="block text-sm font-semibold text-gray-900">Lead ID</label>
+      <input type="text" [(ngModel)]="filterData.leadId" placeholder="Enter Lead ID"
+        class="w-full text-sm  focus:ring-gray-900 focus:outline-none focus:border-black   h-[40px] bg-transparent backdrop-blur-[68.94px] placeholder-[#988C8C] placeholder-opacity-100   border-1 border-[#FFFFFF] !important rounded-full !ps-6 p-4 mt-2">
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-900  pt-1 ">Lead Name</label>
+      <input type="text" [(ngModel)]="filterData.leadName" placeholder="Enter Lead Name"
+        class="w-full text-sm  focus:ring-gray-900 focus:outline-none focus:border-black   h-[40px] bg-transparent backdrop-blur-[68.94px] placeholder-[#988C8C] placeholder-opacity-100   border-1 border-[#FFFFFF] !important rounded-full !ps-6 p-4 mt-2">
+    </div>
+    <div class="relative w-full ">
+      <label class="block text-sm font-semibold text-gray-900 pt-1">Assigned To</label>
+      <div
+        class=" flex justify-between items-center 
+        w-full text-sm   h-[40px] bg-transparent backdrop-blur-[68.94px] placeholder-[#988C8C] placeholder-opacity-100   border-1 border-[#FFFFFF] !important rounded-full !ps-6 p-4 mt-2 cursor-pointer"
+        (click)="toggleAssignedToDropdown()">
+
+
+        <span [ngClass]="filterData.assignedTo ? 'text-gray-800' : 'text-[#988C8C]'" class="text-opacity-100">
+          {{ getSelectedAssigneeName() }}
+        </span>
+
+        <div class="h-8 w-8 flex items-center justify-center bg-white/80 rounded-full  border border-white">
+          <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+            [ngClass]="{'rotate-180': showAssignedToDropdown}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+            fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+      <div *ngIf="showAssignedToDropdown" class="absolute left-0 w-full bg-white rounded-lg shadow-md 
+                  max-h-[200px] overflow-y-auto z-50 p-1 mt-1 border border-gray-300">
+        <div *ngFor="let assignee of assigneeList" (click)="selectAssignee(assignee)"
+          class="px-3 py-2 cursor-pointer text-xs rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+          {{ assignee.name }}
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 pt-1">
+      <div class="w-1/2">
+        <label class="block text-sm font-semibold text-gray-900 ">From Date</label>
+        <input type="date" [(ngModel)]="filterData.fromDate" [ngClass]="{
+          'text-[#988C8C]': !filterData.fromDate,
+          'text-gray-800': filterData.fromDate
+        }"
+          class="flex justify-between items-center 
+          w-full text-sm   h-[40px] bg-transparent text-[#988C8C] backdrop-blur-[68.94px] placeholder-[#988C8C] placeholder-opacity-100   border-1 border-[#FFFFFF] !important rounded-full !ps-6 p-4 mt-2 cursor-pointer">
+      </div>
+      <div class="w-1/2">
+        <label class="block text-sm font-semibold text-gray-900 ">To Date</label>
+        <input type="date" [(ngModel)]="filterData.toDate" [ngClass]="{
+          'text-[#988C8C]': !filterData.toDate,
+          'text-gray-800': filterData.toDate
+        }" class="flex justify-between items-center 
+               w-full text-sm h-[40px] bg-transparent 
+               backdrop-blur-[68.94px] 
+               placeholder-[#988C8C] placeholder-opacity-100 
+               border-1 border-[#FFFFFF] rounded-full ps-6 p-4 mt-2 cursor-pointer">
+
+      </div>
+    </div>
+    <div class="relative w-full pt-1">
+      <label class="block text-sm font-semibold text-gray-900 ">Industry Type</label>
+      <div
+        class="flex justify-between items-center 
+        w-full text-sm   h-[40px] bg-transparent  backdrop-blur-[68.94px] placeholder-[#988C8C] placeholder-opacity-100   border-1 border-[#FFFFFF] !important rounded-full !ps-6 p-4 mt-2 cursor-pointer"
+        (click)="showIndustryDropdown = !showIndustryDropdown">
+        <span [ngClass]="filterData.industryType ? 'text-gray-800' : 'text-[#988C8C]'" class="text-opacity-100">
+          {{ filterData.industryType || 'Select Industry Type' }}
+        </span>
+
+        <div class="h-8 w-8 flex items-center justify-center bg-white/80 rounded-full  border border-white">
+          <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+            [ngClass]="{'rotate-180': showIndustryDropdown}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+            fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+      <div *ngIf="showIndustryDropdown" class="absolute top-full left-0 w-full bg-white rounded-lg shadow-md 
+               max-h-[200px] overflow-y-auto z-50 p-1 mt-1 border border-gray-300">
+        <div *ngFor="let type of industryTypes" (click)="selectIndustry(type)" class="px-3 py-2 cursor-pointer text-sm rounded-md mx-2 my-1 
+                 hover:bg-black hover:text-white">
+          {{ type }}
+        </div>
+      </div>
+    </div>
+    <div class="relative w-full pt-1">
+      <label class="block text-sm font-semibold text-gray-900 ">
+        Status
+      </label>
+      <div
+        class="flex justify-between items-center 
+      w-full text-sm   h-[40px] bg-transparent backdrop-blur-[68.94px] placeholder-[#988C8C] placeholder-opacity-100   border-1 border-[#FFFFFF] !important rounded-full !ps-6 p-4 mt-2 cursor-pointer"
+        (click)="showStatusDropdown = !showStatusDropdown">
+        <span [ngClass]="filterData.status  ? 'text-gray-800' : 'text-[#988C8C]'" class="text-opacity-100">
+          {{ filterData.status || 'Select Status' }}
+        </span>
+        <div class="h-8 w-8 flex items-center justify-center bg-white/80 rounded-full  border border-white">
+          <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+            [ngClass]="{'rotate-180': showStatusDropdown}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+            fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+      <div *ngIf="showStatusDropdown" class="absolute left-0 w-full bg-white rounded-lg shadow-md 
+                  max-h-[200px] overflow-y-auto z-50 p-1 mt-1">
+        <div *ngFor="let status of leadStatuses" (click)="selectStatus(status)"
+          class="px-3 py-2 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+          {{ status }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex gap-2 pt-8">
+    <button (click)="close()" class="w-1/2 border rounded-full p-2 bg-transparent  backdrop-blur-[68.94px] 
+            shadow-[0px_4.31px_4.31px_0px_rgba(255,255,255,0.05] text-gray-700 px-3">Cancel</button> &nbsp;
+    <button class="w-1/2 border rounded-full p-2 bg-black text-white" (click)="applyFilters()">Apply</button>
+  </div>
+</div>

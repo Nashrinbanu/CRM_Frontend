@@ -1,0 +1,33 @@
+<form [formGroup]="otpForm" class="max-w-md mx-auto bg-white 2xl:max-w-xl">
+  <div class="text-left mb-6">
+    <img src="assets/crm-logo.svg" class="w-30   2xl:w-40 mb-4" alt="Shenll CRM Logo" />
+    <p class="text-3xl  2xl:text-4xl  font-[600] text-[#1c0d0d] ">Enter the Code</p>
+    <p class="text-base 2xl:text-xl  font-[400] text-[#7d7c86] mt-1 ">
+      Please enter the verification code we sent to your email to continue securely.
+    </p>
+  </div>
+
+  <div class="flex justify-between gap-4 my-6">
+    <input type="text" maxlength="1"
+      class="w-16 h-16 2xl:w-20 2xl:h-20 text-center text-black text-lg rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+      formControlName="digit1" (keydown)="moveFocus($event, 0)" />
+    <input type="text" maxlength="1"
+      class="w-16 h-16  2xl:w-20 2xl:h-20 text-center text-black text-lg rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+      formControlName="digit2" (keydown)="moveFocus($event, 1)" />
+    <input type="text" maxlength="1"
+      class="w-16 h-16  2xl:w-20 2xl:h-20 text-center text-black text-lg rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+      formControlName="digit3" (keydown)="moveFocus($event, 2)" />
+    <input type="text" maxlength="1"
+      class="w-16 h-16  2xl:w-20 2xl:h-20 text-center text-black text-lg rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+      formControlName="digit4" (keydown)="moveFocus($event, 3)" />
+  </div>
+
+  <button type="submit" (click)="verifyOtp()" [disabled]="otpForm.invalid || isLoading"
+    class="w-full mt-4 bg-black text-white py-3 2xl:py-4 text-sm rounded-full hover:bg-gray-900 transition">
+    Verify Email
+  </button>
+
+  <p class="text-center text-black  mt-4 text-sm  2xl:test-lg">
+    Didn't get a code? <a href="#" class="text-black font-semibold " (click)="resendCode()">Click to resend</a>
+  </p>
+</form>

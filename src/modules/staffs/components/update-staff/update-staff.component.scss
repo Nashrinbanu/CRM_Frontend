@@ -1,0 +1,30 @@
+.ng-invalid.ng-touched {
+  border-color: #f44336 !important;
+}
+.error-message {
+  color: #f44336;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #9ca3af !important;
+}
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+button[color='primary'] mat-spinner circle {
+  stroke: white !important;
+}
+.custom-scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.custom-scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+

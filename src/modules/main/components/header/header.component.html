@@ -1,0 +1,202 @@
+<header class="header-container mx-4 flex items-center justify-between flex-wrap gap-2.5 pt-4">
+  <div class="logo flex items-center gap-2">
+    <button class="hamburger lg:hidden bg-none border-none cursor-pointer" (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <img src="assets/crm-logo.svg" alt="Shenll CRM Logo" class="h-9" />
+  </div>
+  <nav
+  *ngIf="!isMobileScreen()"
+  class="nav-icons flex gap-2.5"
+>
+<button
+*ngFor="let icon of icons"
+class="icon-button text-white relative flex items-center p-2 border border-white rounded-full bg-white/50 transition-all duration-300 ease-in-out w-11 h-10 cursor-pointer overflow-hidden hover:bg-[#1C0D0D] hover:border-[#1C0D0D] hover:w-36 hover:justify-start group"
+[routerLink]="icon.route"
+routerLinkActive="active"
+[ngClass]="{
+  'hover-active': hoverState === icon.route || isActive(icon.route),
+  '!bg-[#1C0D0D] !border-[#1C0D0D] min-w-fit justify-start': isActive(icon.route)
+}"
+(mouseenter)="onMouseEnter(icon.route)"
+(mouseleave)="onMouseLeave()"
+>
+<div class="flex items-center gap-2 min-w-fit">
+  <img
+    [src]="icon.src"
+    [alt]="icon.alt"
+    class="h-5 w-5 ps-1 transition-all duration-300 ease-in-out
+      group-hover:filter group-hover:invert group-hover:scale-110 group-hover:h-5 group-hover:w-5 group-hover:pl-1.5"
+    [ngClass]="{
+      'filter invert scale-110 h-5 w-6 pl-1.5': isActive(icon.route)
+    }"
+  />
+  <!-- Dynamic Text Width -->
+  <span
+    class="whitespace-nowrap text-white text-sm font-medium text-left no-underline py-1.5 px-2 z-10 transition-all duration-300 ease-in-out opacity-100 scale-80 origin-left-center !group-hover:opacity-100 !group-hover:visible group-hover:scale-100 min-w-fit"
+    [ngClass]="{
+      'opacity-100 visible scale-100': isActive(icon.route)
+    }"
+  >
+    {{ icon?.name }}
+  </span>
+</div>
+</button>
+
+</nav>
+  <div class="holeclasss flex items-center">
+    <div *ngIf="!isMobileScreen()" class="extra-icons flex gap-2.5">
+      <button
+        *ngFor="let icon of extraIcon"
+        class="icon-button relative flex items-center justify-center p-2 border border-white rounded-full bg-white/50 transition-all duration-300 ease-in-out w-10 h-10 cursor-pointer overflow-hidden hover:bg-[#1C0D0D] hover:border-[#1C0D0D] hover:w-32 hover:justify-start group"
+        [routerLink]="icon.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <img
+          [src]="icon.src"
+          [alt]="icon.alt"
+          class="h-5 w-5 transition-all duration-300 ease-in-out group-hover:filter group-hover:invert group-hover:scale-110 group-hover:h-6 group-hover:w-6 group-hover:pl-1.5"
+        />
+        <span
+          class="nav-name absolute left-9 whitespace-nowrap text-white text-sm font-medium text-left no-underline py-1.5 px-1 z-10 transition-all duration-300 ease-in-out scale-80 origin-left-center group-hover:opacity-100 group-hover:visible group-hover:scale-100"
+        >
+          {{ icon.name }}
+        </span>
+      </button>
+    </div>
+    <div class="flex items-end gap-[10px] relative ps-3" (click)="$event.stopPropagation()">
+      <div class="text-sm font-medium  text-[#1C0D0D] text-left">
+        {{decodedToken?.full_name}}<br />
+        <div class="text-xs font-medium text-[#909090] text-left pt-2">
+          {{decodedToken?.role}}
+        </div>
+      </div>
+      <div class="relative">
+        <button (click)="toggleDropdown($event)" class="p-2 bg-transparent border-none cursor-pointer">
+          <img src="assets/lead/profile-image.svg" alt="Menu" class="w-10 h-10">
+        </button>
+      
+        <div *ngIf="isDropdownVisible" 
+        class="absolute top-15 right-0 bg-[#e9f3eb] rounded-xl shadow-lg p-3 w-40 border border-white z-10">
+        
+        <a class="flex items-center gap-2 p-2 text-black text-[16px] font-medium leading-[14.4px] font-[Urbanist] rounded-lg cursor-pointer 
+           hover:bg-[#f4f7f6] hover:border hover:border-white group" 
+           (mouseover)="hoverState = 'profile'" (mouseleave)="hoverState = ''"  
+           (click)="isDropdownVisible = false">
+      
+          <img class="w-5 h-5 transition-all duration-300" 
+            [src]="clickedState === 'profile' || hoverState === 'profile' ? 
+              'assets/lead/Profile.svg' : 
+              'assets/lead/Profile-inactive.svg'">
+          
+          <span class="transition-all duration-300 group-hover:text-red-500">Profile</span>
+        </a>
+      
+        <a class="flex items-center gap-2 p-2 text-black text-[16px] font-medium leading-[14.4px] font-[Urbanist] rounded-lg cursor-pointer 
+           hover:bg-[#f4f7f6] hover:border hover:border-white group" 
+           (mouseover)="hoverState = 'settings'" (mouseleave)="hoverState = ''" 
+           (click)="clickedState = 'settings'; isDropdownVisible = false">
+          
+          <img class="w-5 h-5 transition-all duration-300" 
+            [src]="clickedState === 'settings' || hoverState === 'settings' ? 
+              'assets/lead/Settings.svg' : 
+              'assets/lead/Settings-Inactive.svg'">
+          
+          <span class="transition-all duration-300 group-hover:text-red-500">Settings</span>
+        </a>
+      
+        <a class="flex items-center gap-2 p-2 text-black text-[16px] font-medium leading-[14.4px] font-[Urbanist] rounded-lg cursor-pointer 
+           hover:bg-[#f4f7f6] hover:border hover:border-white group" 
+           (mouseover)="hoverState = 'logout'" (mouseleave)="hoverState = ''" 
+           (click)="clickedState = 'logout'; isDropdownVisible = false; logOut()">
+          
+          <img class="w-5 h-5 transition-all duration-300" 
+            [src]="clickedState === 'logout' || hoverState === 'logout' ? 
+              'assets/lead/Logout.svg' : 
+              'assets/lead/Logout-Inactive.svg'">
+          
+          <span class="transition-all duration-300 group-hover:text-red-500">Logout</span>
+        </a>
+      
+      </div>
+      
+      </div>
+      
+      
+    </div>
+  </div>
+  <div
+    class="overlay fixed top-0 left-0 w-full h-full bg-black/50 z-[1000] lg:hidden"
+    *ngIf="isMenuVisible"
+    (click)="toggleMenu()"
+  ></div>
+  <div
+    class="mobile-sidebar  fixed top-0 left-0 h-full w-64 bg-[radial-gradient(circle_at_20%_20%,rgba(244,235,223,1)_0%,transparent_60%),radial-gradient(circle_at_80%_20%,rgba(227,240,230,1)_0%,transparent_60%),radial-gradient(circle_at_50%_70%,rgb(150,167,253)_0%,transparent_75%),radial-gradient(circle_at_50%_80%,rgba(230,241,241,0.5)_0%,transparent_70%)] border border-white shadow-lg z-[1001] transform transition-transform duration-300 ease-in-out lg:hidden"
+    [ngClass]="{'translate-x-0': isMenuVisible, '-translate-x-full': !isMenuVisible}" 
+  >
+    <div class="sidebar-header p-4 border-b border-gray-400">
+      <img src="assets/crm-logo.svg" alt="Shenll CRM Logo" class="h-7" />
+    </div>
+    <div class="p-4">
+      <button
+        *ngFor="let icon of icons"
+        class="icon-button w-full flex items-center  justify-start gap-3 p-2 rounded-lg hover:bg-gray-100 hover:text-red transition-all duration-200"
+        [routerLink]="icon.route"
+        routerLinkActive="active"
+        (click)="toggleMenu()"
+      >
+        <img
+          [src]="icon.src"
+          [alt]="icon.alt"
+          class="h-5 w-5"
+        />
+        <span class="text-sm hover:text-red text-gray-700">{{ icon.name }}</span>
+      </button>
+    </div>
+    <div class="p-4 mt-20">
+      <button
+        *ngFor="let icon of extraIcon"
+        class="icon-button w-full flex items-center  justify-start gap-3 p-2 rounded-lg hover:bg-gray-100 hover:text-red transition-all duration-200"
+        [routerLink]="icon.route"
+        routerLinkActive="active"
+        (click)="toggleMenu()"
+      >
+        <img
+          [src]="icon.src"
+          [alt]="icon.alt"
+          class="h-5 w-5"
+        />
+        <span class="text-sm hover:text-red text-gray-700">{{ icon.name }}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Logout Confirmation Popup -->
+<div *ngIf="showLogoutConfirmation" 
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]"
+     (click)="cancelLogout()">
+  <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl" 
+       (click)="$event.stopPropagation()">
+    <div class="text-center">
+      <div class="mb-4">
+        <img src="assets/lead/Logout.svg" alt="Logout" class="w-12 h-12 mx-auto mb-3">
+        <div class="text-xl font-semibold text-gray-900 mb-2">Are you sure you want to log out?</div>
+        <div class="text-gray-600 font-normal text-sm" >You will need to sign in again to access your account.</div>
+      </div>
+      <div class="flex gap-3 justify-center">
+        <button 
+          (click)="cancelLogout()"
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200 font-medium">
+          Cancel
+        </button>
+        <button 
+          (click)="confirmLogout()"
+          class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 font-medium">
+          Yes, Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

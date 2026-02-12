@@ -1,0 +1,931 @@
+<div class="mt-1">
+  <ul class="flex border-b border-gray-300 mb-3" id="activityTabs" role="tablist">
+    <li class="flex-1 text-center relative" role="presentation" *ngFor="let tab of tabs">
+      <button
+        class="relative w-full text-gray-400 font-medium text-sm pb-3 px-4 py-4 border-b-2 border-transparent transition-all duration-300"
+        [ngClass]="{'text-black border-black font-semibold': activeTab === tab.id}" [id]="tab.id + '-tab'"
+        data-bs-toggle="tab" [attr.data-bs-target]="'#' + tab.id" type="button" role="tab" [attr.aria-controls]="tab.id"
+        [attr.aria-selected]="activeTab === tab.id" (click)="setActiveTabSocial(tab.id)">
+        {{ tab.label | titlecase }}
+        <span *ngIf="activeTab === tab.id"
+          class="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-3 h-1.5 overflow-hidden flex justify-center">
+          <span class="w-2 h-2 bg-black rotate-45 transform origin-center -translate-y-1/2"></span>
+        </span>
+      </button>
+    </li>
+  </ul>
+</div>
+<div class="mt-1 mb-4  overflow-y-auto [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0">
+  <div class="flex justify-end mb-4">
+    <button *ngIf="activeTab !== 'activity' && activeTab !== 'meeting'" (click)="toggleComposeEmail()"
+      class="bg-black text-white px-4 py-2 rounded-full shadow-md border border-white hover:bg-gray-800 transition">
+      {{ activeTab === 'call' ? 'Add Call Log' : (activeTab === 'notes' ? 'Add Note' : 'Add ' + (activeTab | titlecase))
+      }}
+
+    </button>
+  </div>
+  <div *ngIf="showComposeEmail" class="bg-[#F6F6F6] rounded-xl  mt-4 w-full  z-10">
+    <div class="flex items-center justify-between py-2 px-3"
+      *ngIf="activeTab !== 'activity' && activeTab !== 'meeting'">
+      <span class="text-md font-medium">
+        {{ activeTab === 'call' ? 'Add Call Log' : (activeTab === 'notes' ? 'Create New Note' : 'Create ' + (activeTab |
+        titlecase)) }}
+
+      </span>
+      <div class="flex items-center space-x-3">
+        <div *ngIf="activeTab === 'notes'" class="flex items-center space-x-2">
+          <label class="relative flex items-center cursor-pointer space-x-2">
+            <input type="checkbox" id="pinNote" [(ngModel)]="isPinned" [ngModelOptions]="{standalone: true}"
+              class="hidden" />
+            <div
+              class="w-5 h-5 flex items-center justify-center border-2 border-gray-400 rounded transition-all duration-300"
+              [ngClass]="{ 'bg-black border-gray-400': isPinned, 'bg-transparent': !isPinned }">
+              <svg *ngIf="isPinned" class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span class="text-gray-600 font-medium" [ngClass]="{ 'text-black': isPinned }">
+              Pin Note
+            </span>
+          </label>
+        </div>
+        <button (click)="onClose()" class="text-black text-xl font-bold focus:outline-none">
+          <img src="assets/lead/close-button.svg" class="w-6 h-6" />
+        </button>
+      </div>
+    </div>
+    <div class="bg-[#FFFFFF] p-2 rounded-xl z-10" *ngIf="activeTab === 'email'">
+      <form [formGroup]="mailForm">
+        <div class="flex items-center border-b border-gray-300 text-black">
+          <span class="text-black p-2">To:</span>
+          <input id="to" type="email" required formControlName="to" (input)="toLowercaseEmail()"
+            class="bg-transparent border-none outline-none w-full p-2 text-black placeholder-gray-500">
+          <span class="cursor-pointer text-sm text-gray-500 p-2 text-black" (click)="toggleCC()">CC</span>
+          <span class="cursor-pointer text-sm text-gray-500 p-2 text-black" (click)="toggleBCC()">BCC</span>
+        </div>
+        <div *ngIf="to?.invalid && (to?.dirty || to?.touched)" class="text-xs mt-1 text-red-500">
+          Please enter a valid To email address.
+        </div>
+        <div *ngIf="showCC" class="">
+          <input id="cc" type="text" placeholder="CC" formControlName="cc"
+            class="bg-transparent border-b outline-none w-full text-black placeholder-black p-2">
+          <div *ngIf="cc?.invalid && (cc?.dirty || cc?.touched)" class="text-xs mt-1 text-red-500">
+            Please enter a valid CC email address.
+          </div>
+        </div>
+
+        <div *ngIf="showBCC" class="">
+          <input id="bcc" type="text" placeholder="BCC" formControlName="bcc"
+            class="bg-transparent border-b outline-none w-full text-black placeholder-black mt-2 p-2">
+          <div *ngIf="bcc?.invalid && (bcc?.dirty || bcc?.touched)" class="text-xs mt-1 text-red-500">
+            Please enter a valid BCC email address.
+          </div>
+        </div>
+        <div class=" p-2 flex items-center border-b">
+          <span class="text-black">Subject: </span>
+          <input id="subject" type="text" required formControlName="subject"
+            class="bg-transparent  outline-none w-full text-black placeholder-gray-500 p-2">
+        </div>
+
+        <div class="flex flex-col p-2 w-full max-w-lg  rounded-md ">
+          <div #editor contenteditable="true" class="p-3 min-h-[150px]  border-gray-300 focus:outline-none">
+          </div>
+          <div class="m-2" *ngIf="attachedBoolean">
+            <div *ngFor="let file of attachedImages; let i = index"
+              class="flex items-center bg-[#EAEEF5] p-2 rounded-lg w-full mb-2">
+              <span class="text-[#2E66F6] text-sm flex-grow cursor-pointer">{{ file.name }} ({{ file.size
+                }})</span>
+              <button (click)="removeFile(i ,true)" class="ml-2 text-gray-700 hover:text-black">
+                ✖
+              </button>
+            </div>
+
+            <div *ngFor="let file of attachedFiles; let i = index"
+              class="flex items-center bg-[#EAEEF5] p-2 rounded-lg w-full mb-2">
+              <span class="text-[#2E66F6] text-sm flex-grow cursor-pointer">{{ file.name }} ({{ file.size }})</span>
+              <button (click)="removeFile(i ,false)" class="ml-2 text-gray-700 hover:text-black">
+                ✖
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-white border-2 border-[#F6F6F6]">
+            <button onclick="document.execCommand('undo')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-arrow-counterclockwise"></i>
+            </button>
+            <button onclick="document.execCommand('redo')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-arrow-clockwise"></i>
+            </button>
+            <button onclick="document.execCommand('fontName', false, 'sans-serif')"
+              class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type"></i>
+            </button>
+            <button onclick="document.execCommand('bold')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-bold"></i>
+            </button>
+            <button onclick="document.execCommand('italic')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-italic"></i>
+            </button>
+            <button onclick="document.execCommand('underline')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-underline"></i>
+            </button>
+            <button onclick="document.execCommand('strikethrough')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-strikethrough"></i>
+            </button>
+            <button onclick="document.execCommand('insertOrderedList')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-list-ol"></i>
+            </button>
+            <button onclick="document.execCommand('insertUnorderedList')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-list-ul"></i>
+            </button>
+            <button onclick="document.execCommand('justifyLeft')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-text-left"></i>
+            </button>
+            <button onclick="document.execCommand('justifyCenter')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-text-center"></i>
+            </button>
+            <button onclick="document.execCommand('justifyRight')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-text-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-3 mt-3">
+          <button
+            class="bg-[#231815] text-white px-2 py-1  pr-1 rounded-md flex items-center gap-2 border border-[#231815]"
+            (click)="sendContent()">
+            Send
+            <span class="border-l border-white h-6 flex items-center ">
+              <img src="../../../../assets/lead/Arrow.svg" class="w-6 h-6">
+            </span>
+          </button>
+          <label for="fileUpload" class="cursor-pointer">
+            <img src="../../../../assets/lead/file_attach.svg" alt="Attach File">
+          </label>
+          <input type="file" id="fileUpload" (change)="onFileSelected($event)" multiple class="hidden">
+
+          <span class="cursor-pointer" (click)="onInsertLink()">
+            <img src="../../../../assets/lead/-_attach.svg" alt="Insert Link">
+          </span>
+
+          <span class="cursor-pointer" (click)="onAddEmoji()">
+            <img src="../../../../assets/lead/smile_attach.svg" alt="Add Emoji">
+          </span>
+        </div>
+      </form>
+    </div>
+    <div class="bg-[#FFFFFF] rounded-xl z-10 " *ngIf="activeTab === 'call'">
+      <form [formGroup]="callLogForm" (ngSubmit)="onSubmit()" class="space-y-4 p-3">
+        <div class="grid grid-cols-2 gap-3 min-w-full">
+          <div class="relative w-full">
+            <label class="block text-sm font-medium text-gray-800 mb-1">Call For <span
+                class="text-red-500">*</span></label>
+            <div
+              class=" w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                        rounded-3xl p-2 px-3 text-sm cursor-pointer focus:ring-gray-900 focus:outline-none focus:border-black"
+              [ngClass]="{'border-red-500': !selectedCallFor && callLogForm.get('callFor')?.touched}"
+              (click)="showCallForDropdown = !showCallForDropdown">
+              <span [ngClass]="{'text-[#C2C2C2]': !selectedCallFor, 'text-black': selectedCallFor}">
+                {{ selectedCallFor || 'Select here' }}
+              </span>
+              <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                [ngClass]="{'rotate-180': showCallForDropdown}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div *ngIf="showCallForDropdown" class="absolute top-full left-0 w-full bg-white rounded-lg shadow-md max-h-[200px] 
+                        overflow-y-auto z-50 p-1 mt-1 border border-gray-300">
+              <div *ngFor="let option of callForOptions" (click)="selectCallFor(option)" class="px-3 py-2 cursor-pointer text-sm rounded-md mx-2 my-1 
+                          hover:bg-black hover:text-white">
+                {{ option.label }}
+              </div>
+            </div>
+            <p *ngIf="!selectedCallFor && callLogForm.get('callFor')?.touched" class="text-red-500 text-xs mt-1">
+              Call For is required
+            </p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Contact Number <span class="text-red-500">*</span></label>
+            <input class="w-full border rounded-full px-3 py-2" 
+                   [ngClass]="{'border-red-500': callLogForm.get('contactNumber')?.invalid && callLogForm.get('contactNumber')?.touched}"
+              type="text" formControlName="contactNumber" maxlength="10" (keypress)="onlyNumbers($event)"
+              (input)="formatContactNumber($event)" (paste)="onPaste($event)"
+              placeholder="Enter 10-digit number starting with 6-9" />
+            <p *ngIf="callLogForm.get('contactNumber')?.invalid && callLogForm.get('contactNumber')?.touched"
+              class="text-red-500 text-xs mt-1">
+              <span *ngIf="callLogForm.get('contactNumber')?.errors?.['required']">Contact Number is required</span>
+              <span *ngIf="callLogForm.get('contactNumber')?.errors?.['pattern']">Please enter a valid 10-digit number
+                starting with 6-9</span>
+            </p>
+          </div>
+          <div class="relative w-full">
+            <label class="block text-sm font-medium text-gray-800 mb-1">Call Type</label>
+            <div
+              class="w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                        rounded-3xl p-2 px-3 text-sm cursor-pointer focus:ring-gray-900 focus:outline-none focus:border-black"
+              (click)="showCallTypeDropdown = !showCallTypeDropdown">
+              <span [ngClass]="{'text-[#C2C2C2]': !selectedCallType, 'text-black': selectedCallType}">
+                {{ selectedCallType || 'Select here' }}
+              </span>
+              <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                [ngClass]="{'rotate-180': showCallTypeDropdown}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div *ngIf="showCallTypeDropdown" class="absolute top-full left-0 w-full bg-white rounded-lg shadow-md max-h-[200px] 
+                        overflow-y-auto z-50 p-1 mt-1 border border-gray-300">
+              <div *ngFor="let type of callTypeOptions" (click)="selectCallType(type)" class="px-3 py-2 cursor-pointer text-sm rounded-md mx-2 my-1 
+                          hover:bg-black hover:text-white">
+                {{ type.label }}
+              </div>
+            </div>
+          </div>
+          <div class="w-full">
+            <label class="block text-sm font-medium mb-1 text-gray-700">Date <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <input type="date" class="w-full border rounded-full px-3 py-2"
+                [ngClass]="{'border-red-500': callLogForm.get('date')?.invalid && callLogForm.get('date')?.touched}"
+                formControlName="date" />
+            </div>
+            <p *ngIf="callLogForm.get('date')?.invalid && callLogForm.get('date')?.touched"
+              class="text-red-500 text-xs mt-1">
+              Date is required
+            </p>
+          </div>
+
+          <div class="grid grid-cols-12 gap-3 min-w-full box-border">
+            <div class="col-span-6 relative">
+              <label class="block text-sm font-medium mb-1">Start Time</label>
+              <div class="relative">
+                <input type="time" class="w-full border border-gray-300 rounded-full px-3 py-2 bg-white text-black 
+         focus:ring-gray-900 focus:outline-none focus:border-black  outline-none placeholder-gray-400 pr-10"
+                  formControlName="startTime" />
+              </div>
+              <p *ngIf="callLogForm.controls['startTime'].invalid && callLogForm.controls['startTime'].touched"
+                class="text-red-500 text-xs">
+                Invalid time format (HH:MM)
+              </p>
+            </div>
+
+            <div class="col-span-6 relative">
+              <label class="block text-sm font-medium mb-1">End Time</label>
+              <div class="relative">
+                <input type="time" class="w-full border border-gray-300 rounded-full px-3 py-2 bg-white text-black 
+         focus:ring-gray-900 focus:outline-none focus:border-black  outline-none placeholder-gray-400 pr-10"
+                  formControlName="endTime" />
+              </div>
+              <p *ngIf="callLogForm.controls['endTime'].invalid && callLogForm.controls['endTime'].touched"
+                class="text-red-500 text-xs">
+                Invalid time format (HH:MM)
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Call Duration</label>
+            <input type="text" class="w-full border rounded-full px-3 py-2" formControlName="callDuration"
+              placeholder="Type here" />
+          </div>
+          <div class="relative w-full">
+            <label class="block text-sm font-medium text-gray-800 mb-1">Call Purpose</label>
+            <div class="w-full bg-transparent border border-gray-800 flex justify-between items-center 
+              rounded-3xl p-2 px-3 text-sm cursor-pointer focus:ring-gray-900 focus:outline-none focus:border-black"
+              (click)="showCallPurposeDropdown = !showCallPurposeDropdown">
+              <span [ngClass]="{'text-[#C2C2C2]': !selectedCallPurpose, 'text-black': selectedCallPurpose}">
+                {{ selectedCallPurpose || 'Select here' }}
+              </span>
+              <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                [ngClass]="{'rotate-180': showCallPurposeDropdown}" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div *ngIf="showCallPurposeDropdown" class="absolute top-full left-0 w-full bg-white rounded-lg shadow-md max-h-[200px] 
+              overflow-y-auto z-50 p-1 mt-1 border border-gray-300">
+              <div *ngFor="let purpose of callPurposeOptions" (click)="selectCallPurpose(purpose)" class="px-3 py-2 cursor-pointer text-sm rounded-md mx-2 my-1 
+                hover:bg-black hover:text-white">
+                {{ purpose.label }}
+              </div>
+            </div>
+          </div>
+
+          <div class="relative w-full">
+            <label class="block text-sm font-medium text-gray-800 mb-1">Call Status</label>
+            <div class="w-full bg-transparent border border-gray-800 flex justify-between items-center 
+              rounded-3xl p-2 px-3 text-sm cursor-pointer focus:ring-gray-900 focus:outline-none focus:border-black"
+              (click)="showCallStatusDropdown = !showCallStatusDropdown">
+              <span [ngClass]="{'text-[#C2C2C2]': !selectedCallStatus, 'text-black': selectedCallStatus}">
+                {{ selectedCallStatus || 'Select here' }}
+              </span>
+              <svg class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                [ngClass]="{'rotate-180': showCallStatusDropdown}" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div *ngIf="showCallStatusDropdown" class="absolute top-full left-0 w-full bg-white rounded-lg shadow-md max-h-[200px] 
+              overflow-y-auto z-50 p-1 mt-1 border border-gray-300">
+              <div *ngFor="let status of callStatusOptions" (click)="selectCallStatus(status)" class="px-3 py-2 cursor-pointer text-sm rounded-md mx-2 my-1 
+                hover:bg-black hover:text-white">
+                {{ status.label }}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-2">
+            <label class="block text-sm font-medium mb-1">Description</label>
+            <textarea class="w-full border rounded-lg px-3 py-2" formControlName="description"
+              placeholder="Type here"></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 min-w-full">
+          <button type="button" class="bg-gray-300 text-black px-4 py-2 rounded-md" (click)="onClose()">Cancel</button>
+          <button type="submit" class="bg-black text-white px-4 py-2 rounded-md">Save</button>
+        </div>
+      </form>
+    </div>
+    <div class="bg-[#FFFFFF] rounded-xl z-10" *ngIf="activeTab === 'notes'">
+      <form [formGroup]="notesForm" class="bg-[#FFFFFF] rounded-xl z-10 space-y-4 mb-2 p-3 z-10">
+
+        <div class="border-b border-gray-300">
+          <input type="text" class="bg-transparent border-b w-full py-1 px-3 focus:outline-none placeholder-black "
+            formControlName="title" placeholder="Title" required>
+        </div>
+        <div class="border-b border-gray-300">
+          <input type="text" formControlName="description"
+            class="w-full bg-transparent border-b  w-full px-3 py-1 placeholder-black  focus:outline-none "
+            placeholder="Description" />
+        </div>
+
+        <div class="flex flex-col p-2 w-full max-w-lg  rounded-md ">
+          <div #editor contenteditable="true" class="p-3 min-h-[150px]  border-gray-300 focus:outline-none">
+          </div>
+          <div class="m-2" *ngIf="attachedBoolean">
+            <div *ngFor="let file of attachedImages; let i = index"
+              class="flex items-center bg-[#EAEEF5] p-2 rounded-lg w-full mb-2">
+              <span class="text-[#2E66F6] text-sm flex-grow cursor-pointer">{{ file.name }} ({{ file.size
+                }})</span>
+              <button (click)="removeFile(i ,true)" class="ml-2 text-gray-700 hover:text-black">
+                ✖
+              </button>
+            </div>
+
+            <div *ngFor="let file of attachedFiles; let i = index"
+              class="flex items-center bg-[#EAEEF5] p-2 rounded-lg w-full mb-2">
+              <span class="text-[#2E66F6] text-sm flex-grow cursor-pointer">{{ file.name }} ({{ file.size }})</span>
+              <button (click)="removeFile(i ,false)" class="ml-2 text-gray-700 hover:text-black">
+                ✖
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-white border-2 border-[#F6F6F6]">
+            <button onclick="document.execCommand('undo')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-arrow-counterclockwise"></i>
+            </button>
+            <button onclick="document.execCommand('redo')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-arrow-clockwise"></i>
+            </button>
+            <button onclick="document.execCommand('fontName', false, 'sans-serif')"
+              class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type"></i>
+            </button>
+            <button onclick="document.execCommand('bold')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-bold"></i>
+            </button>
+            <button onclick="document.execCommand('italic')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-italic"></i>
+            </button>
+            <button onclick="document.execCommand('underline')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-underline"></i>
+            </button>
+            <button onclick="document.execCommand('strikethrough')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-type-strikethrough"></i>
+            </button>
+            <button onclick="document.execCommand('insertOrderedList')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-list-ol"></i>
+            </button>
+            <button onclick="document.execCommand('insertUnorderedList')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-list-ul"></i>
+            </button>
+            <button onclick="document.execCommand('justifyLeft')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-text-left"></i>
+            </button>
+            <button onclick="document.execCommand('justifyCenter')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-text-center"></i>
+            </button>
+            <button onclick="document.execCommand('justifyRight')" class="text-gray-700 hover:text-black">
+              <i class="bi fs-5 bi-text-right"></i>
+            </button>
+          </div>
+        </div>
+
+
+        <div class="flex items-center space-x-3 mt-3 mb-3">
+          <button class="bg-black text-white px-2 py-2 rounded-md flex items-center" (click)="sendContent()">
+            Add Note
+          </button>
+
+          <label for="fileUpload" class="cursor-pointer">
+            <img src="../../../../assets/lead/file_attach.svg" alt="Attach File">
+          </label>
+          <input type="file" id="fileUpload" (change)="onFileSelected($event)" multiple class="hidden">
+
+          <span class="cursor-pointer" (click)="onInsertLink()">
+            <img src="../../../../assets/lead/-_attach.svg" alt="Insert Link">
+          </span>
+
+          <span class="cursor-pointer" (click)="onAddEmoji()">
+            <img src="../../../../assets/lead/smile_attach.svg" alt="Add Emoji">
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- EMAIL TIMELINE SECTION - ONLY FOR EMAIL TAB -->
+  <div class="mt-4 z-10" *ngIf="activeTab === 'email'">
+    <div class="relative flex items-start mb-6 ml-14" *ngFor="let item of paginatedEmails">
+      <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+      <div class="relative flex items-center justify-center">
+        <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+          {{ formatDateIST(item.created_at) }}
+        </span>
+        <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+        <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+      </div>
+      <div
+        class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+        <details class="bg-transparent open:bg-transparent ">
+          <summary class="cursor-pointer font-bold px-2 py-3 flex justify-between items-center rounded-t-xl">
+
+            <div class="flex items-center gap-2">
+              <div class=" flex items-center justify-center">
+                <img src="assets/lead/mail-sent.svg" class="w-7 h-7" />
+              </div>
+
+              <div>
+                <div class="font-bold text-xs text-black">{{item?.subject}} &nbsp;
+                  <span class="text-gray-700 font-medium">{{item?.recipients}}</span>
+                </div>
+                <div class="text-xs text-[#1C0D0D] font-medium">{{item?.body}}</div>
+              </div>
+            </div>
+
+            <div class="text-right">
+              <div class="text-xs font-semibold">{{formatTimeAndDifference(item?.created_at) }}</div>
+            </div>
+          </summary>
+          <div class="p-2 text-sm">
+            <div class="grid grid-cols-3 gap-4 p-2 bg-gray-300 border border-gray-300"
+                 *ngIf="(item.attachments && item.attachments.length) || (item.images && item.images.length)">
+            <div class="call-details">document</div>
+              
+                 <div class="flex items-center gap-2" *ngFor="let file of item.attachments.concat(item.images)">
+                <img [src]="getFileIcon(file)" class="w-8 h-8" (error)="onImageError($event)">
+                <div>
+                  <div class="font-semibold text-xs" [title]="getFileName(file)">
+                    {{ getFileName(file) | slice:0:20 }}{{ getFileName(file).length > 16 ? '...' : '' }}
+                  </div>
+
+                  <div class="text-gray-500 text-[10px]">1.9mb</div> <!-- Replace with actual size if available -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <!-- Email pagination -->
+    <div class="flex justify-center items-center gap-2 mt-2" *ngIf="emailTotalPages > 1">
+      <button (click)="setEmailPage(emailPage - 1)" [disabled]="emailPage === 1"
+        class="px-2 py-1 border rounded">Prev</button>
+      <span>Page {{emailPage}} of {{emailTotalPages}}</span>
+      <button (click)="setEmailPage(emailPage + 1)" [disabled]="emailPage === emailTotalPages"
+        class="px-2 py-1 border rounded">Next</button>
+    </div>
+  </div>
+
+  <!-- CALLS TIMELINE SECTION - ONLY FOR CALL TAB -->
+  <div *ngIf="activeTab === 'call'">
+    <div class="mt-4 z-10 overflow-y-auto no-scrollbar" style="max-height: 500px;" (scroll)="onScrollCalls($event)">
+      <div class="relative flex items-start mb-6 ml-14"
+        *ngFor="let item of activityData.call.slice(0, visibleCallsCount)">
+        <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+        <div class="relative flex items-center justify-center">
+          <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+            {{ formatDateIST(item.created_at) }}
+          </span>
+          <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+          <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+        </div>
+        <div
+          class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+          <details class="bg-transparent open:bg-transparent ">
+            <summary class="cursor-pointer font-bold px-2 py-3 flex justify-between items-center rounded-t-xl">
+              <div class="flex items-center gap-2">
+                <div class=" flex items-center justify-center">
+                  <img src="../../../../assets/lead/call-sent.svg" class="w-7 h-7" />
+                </div>
+                <div>
+                  <div class="font-bold text-xs text-black">{{item?.call_for}}</div>
+                  <div class="text-xs text-[#1C0D0D] font-medium">{{item?.description}}</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-semibold">{{formatTimeAndDifference(item?.created_at) }}</div>
+                <div class="text-xs text-[#1C0D0D] font-medium">{{item?.purpose}}</div>
+              </div>
+            </summary>
+          </details>
+        </div>
+      </div>
+      <div *ngIf="loadingCalls" class="flex justify-center py-4">
+        <span class="loader"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES TIMELINE SECTION - ONLY FOR NOTES TAB -->
+  <div *ngIf="activeTab === 'notes'">
+    <div class="mt-4 z-10 overflow-y-auto no-scrollbar" style="max-height: 500px;" (scroll)="onScrollNotes($event)">
+      <div class="relative flex items-start mb-6 ml-14"
+        *ngFor="let item of activityData.notes.slice(0, visibleNotesCount) | orderByPinned">
+        <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+        <div class="relative flex items-center justify-center">
+          <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+            {{ formatDateIST(item.created_at) }}
+          </span>
+          <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+          <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+        </div>
+        <div
+          class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+          <details class="bg-transparent open:bg-transparent ">
+            <summary class="cursor-pointer font-bold px-2 py-3 flex justify-between items-center rounded-t-xl">
+              <div class="flex items-center gap-2">
+                <div class=" flex items-center justify-center">
+                  <img src="../../../../assets/lead/activity-notes.svg" class="w-7 h-7" />
+                </div>
+                <div>
+                  <div class="font-bold text-xs text-black">{{ item.title }}</div>
+                </div>
+              </div>
+              <div class="flex flex-col items-center text-right">
+                <div class="text-xs font-semibold">{{formatTimeAndDifference(item?.created_at) }}</div>
+                <img *ngIf="item.is_pinned" src="assets/lead/pinned.svg" alt="Pinned" class="w-7 h-7 mt-1" />
+              </div>
+            </summary>
+            <div class="p-2 text-sm">
+                  <div class="text-xs text-[#1C0D0D] font-medium">{{item?.description}}</div>
+
+              <p>{{ item.body }}</p>
+              <div class="grid grid-cols-3 gap-4 p-2 bg-gray-300 border border-gray-300"
+              *ngIf="(item.attachments && item.attachments.length) || (item.images && item.images.length)">
+              <div class="call-details">document</div>
+                
+              <div class="flex items-center gap-2" *ngFor="let file of item.attachments.concat(item.images)">
+                  <img [src]="getFileIcon(file)" class="w-8 h-8" (error)="onImageError($event)">
+                  <div>
+                    <div class="font-semibold text-xs" [title]="getFileName(file)">
+                      {{ getFileName(file) | slice:0:20 }}{{ getFileName(file).length > 16 ? '...' : '' }}
+                    </div>
+                    <div class="text-gray-500 text-[10px]">1.9mb</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div *ngIf="loadingNotes" class="flex justify-center py-4">
+        <span class="loader"></span>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- ACTIVITY TAB: merged timeline -->
+  <div *ngIf="activeTab === 'activity'">
+    <div class="mt-4 z-10 overflow-y-auto no-scrollbar" style="max-height: 600px;" (scroll)="onScrollMerged($event)">
+      <div class="relative flex items-start mb-6 ml-14"
+        *ngFor="let item of mergedActivities.slice(0, visibleMergedCount)">
+        <ng-container [ngSwitch]="item._type">
+          <!-- Email log -->
+          <ng-container *ngSwitchCase="'email'">
+            <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+            <div class="relative flex items-center justify-center">
+              <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+                {{ formatDateIST(item.created_at) }}
+              </span>
+              <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+              <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+            </div>
+            <div
+              class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+              <details class="bg-transparent open:bg-transparent ">
+                <summary class="cursor-pointer font-bold px-2 py-3 flex justify-between items-center rounded-t-xl">
+                  <div class="flex items-center gap-2">
+                    <div class=" flex items-center justify-center">
+                      <img src="assets/lead/mail-sent.svg" class="w-7 h-7" />
+                    </div>
+                    <div>
+                      <div class="font-bold text-xs text-black">{{item?.subject}} &nbsp;
+                        <span class="text-gray-700 font-medium">{{item?.recipients}}</span>
+                      </div>
+                      <div class="text-xs text-[#1C0D0D] font-medium">{{item?.body}}</div>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xs font-semibold">{{formatTimeAndDifference(item?.created_at) }}</div>
+                  </div>
+                </summary>
+                <div class="p-2 text-sm">
+                  <div class="grid grid-cols-3 gap-4 p-2 bg-gray-300 border border-gray-300"
+                       *ngIf="(item.attachments && item.attachments.length) || (item.images && item.images.length)">
+                    <div class="call-details">document</div>
+                    <div class="flex items-center gap-2" *ngFor="let file of item.attachments.concat(item.images)">
+                      <img [src]="getFileIcon(file)" class="w-8 h-8" (error)="onImageError($event)">
+                      <div>
+                        <div class="font-semibold text-xs" [title]="getFileName(file)">
+                          {{ getFileName(file) | slice:0:20 }}{{ getFileName(file).length > 16 ? '...' : '' }}
+                        </div>
+                        <div class="text-gray-500 text-[10px]">1.9mb</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </ng-container>
+          <!-- Call log -->
+          <ng-container *ngSwitchCase="'call'">
+            <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+            <div class="relative flex items-center justify-center">
+              <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+                {{ formatDateIST(item.created_at) }}
+              </span>
+              <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+              <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+            </div>
+            <div
+              class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+              <details class="bg-transparent open:bg-transparent ">
+                <summary class="cursor-pointer font-bold px-2 py-3 flex justify-between items-center rounded-t-xl">
+                  <div class="flex items-center gap-2">
+                    <div class=" flex items-center justify-center">
+                      <img src="../../../../assets/lead/call-sent.svg" class="w-7 h-7" />
+                    </div>
+                    <div>
+                      <div class="font-bold text-xs text-black">{{item?.call_for}}</div>
+                      <div class="text-xs text-[#1C0D0D] font-medium">{{item?.description}}</div>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xs font-semibold">{{formatTimeAndDifference(item?.created_at) }}</div>
+                    <div class="text-xs text-[#1C0D0D] font-medium">{{item?.purpose}}</div>
+                  </div>
+                </summary>
+              </details>
+            </div>
+          </ng-container>
+          <!-- Notes log -->
+          <ng-container *ngSwitchCase="'notes'">
+            <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+            <div class="relative flex items-center justify-center">
+              <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+                {{ formatDateIST(item.created_at) }}
+              </span>
+              <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+              <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+            </div>
+            <div
+              class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+              <details class="bg-transparent open:bg-transparent ">
+                <summary class="cursor-pointer font-bold px-2 py-3 flex justify-between items-center rounded-t-xl">
+                  <div class="flex items-center gap-2">
+                    <div class=" flex items-center justify-center">
+                      <img src="../../../../assets/lead/activity-notes.svg" class="w-7 h-7" />
+                    </div>
+                    <div>
+                      <div class="font-bold text-xs text-black">{{ item.title }}</div>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-center text-right">
+                    <div class="text-xs font-semibold">{{formatTimeAndDifference(item?.created_at) }}</div>
+                    <img *ngIf="item.is_pinned" src="assets/lead/pinned.svg" alt="Pinned" class="w-7 h-7 mt-1" />
+                  </div>
+                </summary>
+                <div class="p-2 text-sm">
+                  <div class="text-xs text-[#1C0D0D] font-medium">{{item?.description}}</div>
+                  <p>{{ item.body }}</p>
+                  <div class="grid grid-cols-3 gap-4 p-2 bg-gray-300 border border-gray-300"
+                       *ngIf="(item.attachments && item.attachments.length) || (item.images && item.images.length)">
+                    <div class="call-details">document</div>
+                    <div class="flex items-center gap-2" *ngFor="let file of item.attachments.concat(item.images)">
+                      <img [src]="getFileIcon(file)" class="w-8 h-8" (error)="onImageError($event)">
+                      <div>
+                        <div class="font-semibold text-xs" [title]="getFileName(file)">
+                          {{ getFileName(file) | slice:0:20 }}{{ getFileName(file).length > 16 ? '...' : '' }}
+                        </div>
+                        <div class="text-gray-500 text-[10px]">1.9mb</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </ng-container>
+          <!-- Status change log -->
+          <ng-container *ngSwitchCase="'status'">
+            <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+            <div class="relative flex items-center justify-center">
+              <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+                {{ formatDateIST(item.change_timestamp) }}
+              </span>
+              <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+              <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+            </div>
+            <div
+              class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+              <details class="bg-transparent open:bg-transparent">
+                <summary class="cursor-pointer font-bold px-2 py-3 flex items-center rounded-t-xl">
+                  <div class="flex flex-row items-center gap-2 w-full">
+                    <div class="flex items-center gap-2 flex-1">
+                      <div class="flex items-center justify-center bg-[#AD9CEF] rounded-xl  ">
+                        <span><img src="assets/lead/next-step.svg" class="w-7" /></span>
+                      </div>
+                      <div>
+                        <div class="font-bold text-xs text-black">Lead Update</div>
+                        <div class="text-xs text-gray-500 mt-1">
+                          Updated By:
+                          <img [src]="getProfileImage(getChangedByUser(item))"
+                            class="inline-block  ml-1 w-6 h-6 rounded-full border border-white mr-1 align-middle"
+                            alt="User Image" (error)="onImageError($event)" />
+                          <span class="font-semibold align-middle">{{ getUserNameById(item.changed_by) }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-xs font-semibold text-gray-500 min-w-[60px] text-right">
+                      {{ formatTimeIST(item.change_timestamp) }}
+                    </div>
+                  </div>
+                </summary>
+                <div class="px-6 py-2">
+                  <ng-container *ngIf="hasAnyRealChange(item.changed_fields); else unchangedMsg">
+                    <div *ngFor="let key of (item.changed_fields | keyvalue)">
+                      <div *ngIf="isRealChange(key.value) && key.key !== 'updated_at'"
+                        class="bg-transparent border border-[#CACACA] rounded-lg  p-4 my-2 w-full text-xs text-[#1C0D0D] font-medium">
+                        <ng-container
+                          *ngIf="key.key === 'social_media_url' && getOldNewValue(key.value, 'new') && getOldNewValue(key.value, 'new').length">
+                          {{ getFieldLabel(key.key) }}:
+                          <div *ngFor="let url of getOldNewValue(key.value, 'new')">
+                            <span class="ml-2">{{ url }}</span>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="key.key === 'company_website'">
+                          {{ getFieldLabel(key.key) }}:
+                          <a [href]="getOldNewValue(key.value, 'new')" target="_blank"
+                            class="text-blue-600 underline break-all">
+                            {{ getOldNewValue(key.value, 'new') }}
+                          </a>
+                        </ng-container>
+                        <ng-container *ngIf="key.key === 'contacts'">
+                          {{ getFieldLabel(key.key) }}:
+                          <div *ngFor="let contact of getOldNewValue(key.value, 'new')">
+                            <div class="ml-2">
+                              <br><span>Name: {{ contact.name }}</span><br>
+                              <span *ngIf="contact.email"> | Email: {{ contact.email }}</span> <br>
+                              <span *ngIf="contact.phone"> | Phone: {{ contact.phone }}</span><br>
+                              <span *ngIf="contact.job_title"> | Job Title: {{ contact.job_title }}</span>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="key.key !== 'contacts' && key.key !== 'social_media_url' && key.key !== 'company_website'">
+                          {{ getFieldLabel(key.key) }}:
+                          <span>
+                            {{ formatValue(getOldNewValue(key.value, 'old'), '' + key.key) }}
+                          </span>
+                          <span> Updated to </span>
+                          <span>
+                            {{ formatValue(getOldNewValue(key.value, 'new'), '' + key.key) }}
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #unchangedMsg>
+
+                    <div
+                      class="bg-transparent border border-[#CACACA] rounded-lg  p-4 my-2 w-full text-xs text-[#1C0D0D] font-medium">
+                    Lead status is unchanged at this time.
+                    </div>
+
+                  </ng-template>
+                </div>
+              </details>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div *ngIf="loadingMerged" class="flex justify-center py-4">
+        <span class="loader"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Change History Section - ONLY FOR STATUS TAB -->
+  <div *ngIf="statusHistory?.length && activeTab === 'status'">
+    <div class="mt-4 z-10">
+      <div class="relative flex items-start mb-6 ml-14" *ngFor="let status of statusHistory ">
+        <div class="absolute left-[10px] top-5 h-full border-l-[1px] border-dashed border-[#7D7C86]"></div>
+        <div class="relative flex items-center justify-center">
+          <span class="absolute left-[-45px] text-xs md:text-[9px] font-normal">
+            {{ formatDateIST(status.change_timestamp) }}
+          </span>
+          <img src="assets/lead/timeline-icon-received.svg" class="w-4 h-4" />
+          <div class="w-[40px] border-t-[1px] border-dashed border-[#7D7C86]"></div>
+        </div>
+        <div
+          class="w-full self-center rounded-lg border-dashed border-[#CACACA] border-1 mt-[-17px] bg-transparent shadow-sm">
+          <details class="bg-transparent open:bg-transparent">
+            <summary class="cursor-pointer font-bold px-2 py-3 flex items-center rounded-t-xl">
+              <div class="flex flex-row items-center gap-2 w-full">
+                <!-- Icon and summary -->
+                <div class="flex items-center gap-2 flex-1">
+                  <div class="flex items-center justify-center">
+                    <img src="assets/lead/status-nav.svg" class="w-7 h-7" />
+                  </div>
+                  <div>
+                    <div class="font-bold text-xs text-black">Lead Update</div>
+                  </div>
+                </div>
+                <!-- Time (right) -->
+                <div class="text-xs font-semibold text-gray-500 min-w-[60px] text-right">
+                  {{ formatTimeIST(status.change_timestamp) }}
+                </div>
+              </div>
+            </summary>
+            <div class="px-6 py-2">
+              <ng-container *ngIf="hasAnyRealChange(status.changed_fields); else unchangedMsg">
+                <div *ngFor="let key of (status.changed_fields | keyvalue)">
+                  <div *ngIf="isRealChange(key.value) && key.key !== 'updated_at'"
+                    class="bg-[#f7f7f7] rounded-xl shadow p-4 my-2 w-full text-xs text-[#1C0D0D] font-medium">
+                    <ng-container
+                      *ngIf="key.key === 'social_media_url' && getOldNewValue(key.value, 'new') && getOldNewValue(key.value, 'new').length">
+                      {{ getFieldLabel(key.key) }}:
+                      <div *ngFor="let url of getOldNewValue(key.value, 'new')">
+                        <span class="ml-2">{{ url }}</span>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="key.key === 'company_website'">
+                      {{ getFieldLabel(key.key) }}:
+                      <a [href]="getOldNewValue(key.value, 'new')" target="_blank"
+                        class="text-blue-600 underline break-all">
+                        {{ getOldNewValue(key.value, 'new') }}
+                      </a>
+                    </ng-container>
+                    <ng-container *ngIf="key.key === 'contacts'">
+                      {{ getFieldLabel(key.key) }}:
+                      <div *ngFor="let contact of getOldNewValue(key.value, 'new')">
+                        <div class="ml-2">
+                          <br><span>Name: {{ contact.name }}</span><br>
+                          <span *ngIf="contact.email"> | Email: {{ contact.email }}</span> <br>
+                          <span *ngIf="contact.phone"> | Phone: {{ contact.phone }}</span><br>
+                          <span *ngIf="contact.job_title"> | Job Title: {{ contact.job_title }}</span>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="key.key !== 'contacts' && key.key !== 'social_media_url' && key.key !== 'company_website'">
+                      {{ getFieldLabel(key.key) }}:
+                      <span>
+                        {{ formatValue(getOldNewValue(key.value, 'old'), '' + key.key) }}
+                      </span>
+                      <span> Updated to </span>
+                      <span>
+                        {{ formatValue(getOldNewValue(key.value, 'new'), '' + key.key) }}
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #unchangedMsg>
+                Lead status is unchanged at this time.
+              </ng-template>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

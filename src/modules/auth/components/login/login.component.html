@@ -1,0 +1,52 @@
+<form [formGroup]="loginForm" class="max-w-md mx-auto  2xl:!max-w-2xl bg-white">
+  <div class="text-left mb-6">
+    <img src="assets/crm-logo.svg" class="w-30  2xl:w-40 mb-4" alt="Shenll CRM Logo" />
+    <p class="text-2xl 2xl:text-3xl  font-[600] text-[#1c0d0d]">Hey, hello 👋</p>
+    <p class="text-base  2xl:text-lg font-[400] text-[#7d7c86] mt-1">
+      Enter the information you entered while registering.
+    </p>
+  </div>
+
+
+  <div class="mt-4 space-y-1">
+    <label class="block text-sm font-medium text-gray-700">Email</label>
+    <div class="relative mb-3">
+      <input matInput formControlName="email" aria-placeholder="Enter Email" class="w-full p-3 border border-[#7D7C86] text-base text-black rounded-full focus:ring-0 [#FFFFFF]  focus:border-[#1C0D0D] 
+          hover:border-[#1C0D0D] focus:outline-none hover:[#FFFFFF]  focus:[#FFFFFF]  placeholder:text-sm " required
+        placeholder="Enter email" />
+      <p *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-xs text-red-500 mt-1">
+        <ng-container *ngIf="email?.errors?.['required']">Email is required.</ng-container>
+        <ng-container *ngIf="email?.errors?.['email']">Please enter a valid email address.</ng-container>
+      </p>
+    </div>
+
+
+    <label class="block text-sm font-medium text-gray-700">Password</label>
+    <div class="relative">
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" aria-placeholder="Enter Password"
+        class="w-full p-3 border border-[#7D7C86] text-base rounded-full text-black  focus:ring-0 bg-[#FFFFFF] focus:border-[#1C0D0D] 
+          hover:border-[#1C0D0D] focus:outline-none hover:[#FFFFFF]  focus:[#FFFFFF]  placeholder:text-sm"
+        placeholder="Enter password" />
+
+      <button type="button" (click)="hide = !hide" class="absolute right-4 top-1/2 transform -translate-y-1/2">
+        <img *ngIf="hide" src="assets/login/Inactive Password Hide.svg" alt="Hide password" class="w-5 h-5" />
+        <img *ngIf="!hide" src="assets/login/visiblity.svg" alt="Show password" class="w-5 h-5" />
+      </button>
+      <p *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-xs text-red-500 mt-1">
+        <ng-container *ngIf="password?.errors?.['required']">Password is required.</ng-container>
+        <ng-container *ngIf="password?.errors?.['minlength']">Password must be at least 8 characters
+          long.</ng-container>
+      </p>
+    </div>
+
+    <button type="submit" (click)="login()" [disabled]="isLoading"
+      class="w-full mt-4 bg-black text-white py-3  2xl:py-4 text-sm rounded-full hover:bg-gray-900 transition">
+      Login
+    </button>
+
+    <!-- Sign Up Link -->
+    <p class="text-center text-sm  2xl:text-lg text-gray-700 mt-4">
+      Don't have an account? <a href="#" class="text-black font-bold">Sign Up</a>
+    </p>
+  </div>
+</form>

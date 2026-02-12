@@ -1,0 +1,19 @@
+.data-update-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+  background-color: transparent;
+}
+
+.data-update-message {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

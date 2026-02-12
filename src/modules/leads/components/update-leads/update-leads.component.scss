@@ -1,0 +1,48 @@
+.step-success {
+  background: linear-gradient(90deg,#02b994 0%,#39789f 269.42%,#8c44af 487.95%,rgba(255, 14, 14, 0.72) 598.71%) !important;
+}
+
+.step-primary {
+  background: linear-gradient(90deg,#02b994 -74.62%,#2197df 60.08%,#8c44af 352.33%,rgba(255, 14, 14, 0.72) 449.24%) !important;
+}
+
+.step-dark {
+  background: linear-gradient(90deg,#02b994 -173.11%,#39789f 6.4%,#8c44af 244.89%,rgba(255, 14, 14, 0.72) 339.77%) !important;
+}
+
+.step-purple {
+  background: linear-gradient(90deg,#02b994 -364.02%,#39789f -64.29%, #8652ed 84.17%,rgba(255, 14, 14, 0.72) 228.41%) !important;
+}
+
+.step-secondary {
+  background: linear-gradient(90deg, #02B994 -450.76%, #39789F -278.52%, #D83ABB 47.52%, #A6118B 164.39%) !important;
+}
+
+.step-danger {
+  background: linear-gradient(90deg,  #02b994 -450.76%,  #39789f -278.52%,  #f42225 47.52%,  #e82124 164.39%) !important;
+}
+
+.step-lost {
+  background: linear-gradient(90deg, #02B994 -450.76%, #39789F -278.52%, #F42225 47.52%, #E82124 164.39%) !important;
+}
+
+::ng-deep .dialog-exit {
+  animation: slideOut 0.4s ease-in forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.mat-snack-bar-container, .mat-simple-snackbar, .mat-button {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}

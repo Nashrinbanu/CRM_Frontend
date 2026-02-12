@@ -1,0 +1,585 @@
+<div class="flex flex-wrap bg-[radial-gradient(circle_at_20%_20%,rgba(244,235,223,1)_0%,transparent_60%),radial-gradient(circle_at_80%_20%,rgba(227,240,230,1)_0%,transparent_60%),radial-gradient(circle_at_50%_70%,rgb(150,167,253)_0%,transparent_75%),radial-gradient(circle_at_50%_80%,rgba(230,241,241,0.5)_0%,transparent_70%)] border border-white">
+ 
+  <div *ngIf="isLoading; else content">
+    <app-skeleton type="list"></app-skeleton>
+  </div>
+  
+  <ng-template #content>
+  
+  <div class="w-full  xl:w-1/2  p-2 bg-transparent">
+    <div class="bg-gradient-to-r from-[#f4f0ea] to-[#fbf9f6] rounded-[22px] border border-white p-2">
+      <div class="flex justify-between items-start">
+        <div class="flex items-center gap-2">
+          <img src="assets/lead/lead-logo.svg" alt="Company Logo" class="w-26 h-26 xl:w-20 xl:h-20 2xl:w-26 2xl:h-26 rounded-lg" />
+          <div>
+            <span class="bg-black text-white text-[10px] 2xl:text-[10px] xl:text-[10px]  px-2 py-1 rounded-full">LEAD-{{ viewId }}</span>
+            <div class=" text-sm xl:text-xs  2xl:text-sm  font-semibold mt-1">
+              {{ leadDetails?.company_name }}
+            </div>
+            <div class="text-gray-500 text-xs xl:text-[10px]  2xl:text-xs  block">
+              {{ leadDetails?.company_email }}
+            </div>
+            <div class="relative inline-block" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false">
+              <div class="bg-[#d6d6d6] text-[#111010] px-2 py-1 rounded-full text-xs xl:text-[10px]  2xl:text-xs   inline-block mt-1">
+                {{ leadDetails?.industry_type?.length > 25 ? (leadDetails?.industry_type | slice:0:25) + '...' :
+                leadDetails?.industry_type }}
+              </div>
+
+              <div *ngIf="showTooltip && leadDetails?.industry_type?.length > 25"
+                class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-black text-white text-xs xl:text-[10px]  2xl:text-xs xl:text-[10px] 2xl:text-xs xl:text-[10px]  2xl:text-xs px-3 py-1 rounded-lg shadow-lg whitespace-nowrap">
+                {{ leadDetails?.industry_type }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end w-4/12 md:w-5/12 ml-auto">
+          <div class="flex flex-col items-end gap-2 w-full">
+            <ng-container *ngFor="let url of leadDetails?.social_media_url">
+              <a *ngIf="url.includes('linkedin.com')" [href]="url" target="_blank" rel="noopener noreferrer"
+                 class="flex items-center gap-1 px-2 py-1 text-xs xl:text-[10px] 2xl:text-xs bg-[#BBB9E8] rounded-full">
+                <img src="assets/lead/LinkedIn.svg" alt="LinkedIn" class="w-4 h-4" />
+                LinkedIn
+              </a>
+            </ng-container>
+
+            <div class="relative w-auto ml-auto mt-3">
+              <div class="text-xs xl:text-[10px]  2xl:text-xs text-gray-500 text-left w-full mb-1">Assigned To</div>
+              <button
+                class="flex items-center px-2 bg-transparent border border-[#D8D8D8] rounded-full w-40 h-7 justify-between"
+                (click)="toggleDropdown($event)">
+                <div class="flex items-center gap-2 flex-grow">
+                  <ng-container *ngFor="let user of assignedUsers; let i = index">
+                    <img [src]="user?.profileImage ? imageUrl + user?.profileImage : 'assets/lead/Avatar.png'"
+                      class="w-5 h-5 rounded-full border border-white" />
+                  </ng-container>
+                  <span *ngIf="assignedUser" class="text-xs font-medium text-gray-700">{{ assignedUser.name }}</span>
+                </div>
+                <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white ml-2 flex-shrink-0">
+                  <img class="w-4 h-4" src="/assets/pagination/mat-select-dropdown.svg" />
+                </div>
+              </button>
+              <div *ngIf="isDropdownOpen"
+                class="absolute right-0 w-48 mt-2 bg-white rounded-lg shadow-lg overflow-hidden z-50">
+                <div class="mt-2 mb-1 flex items-center border-b">
+                  <img src="assets/lead/search-line 1.svg" class="ms-2 w-4 h-4 opacity-50 mb-2" />
+                  <input type="text" class="w-full text-xs xl:text-[10px]  2xl:text-xs focus:outline-none ms-2 mb-2" placeholder="Search..."
+                    [(ngModel)]="searchText" [ngModelOptions]="{ standalone: true }" />
+                </div>
+                <div
+                  class="max-h-48 overflow-y-auto  mr-1 mb-1 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+                  (click)="toggleDropdown($event)">
+                  <ng-container *ngFor="let user of filteredUsers()">
+                    <div
+                      class="p-1 flex items-center gap-2 rounded-full cursor-pointer text-sm mx-2 my-1 hover:bg-black hover:text-[white] group"
+                      [class.bg-black]="user === selectedUser" [class.text-white]="user === selectedUser"
+                      (click)="assignUser(user, $event)">
+                      <img [src]="getProfileImage(user)" class="w-7 h-7 rounded-full rounded-full transition-all duration-300  group-hover:bg-white" />
+                      <div>
+                        <div class="text-xs xl:text-[10px]  2xl:text-xs font-medium">{{ user.name }}</div>
+                        <div class="text-[10px] font-[400] text-[#5A5D6C] group-hover:text-white">{{user.Designation}}</div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <div class="p-2 border-t flex justify-end">
+                  <button class="py-1 px-4 text-white bg-black rounded-full" (click)="confirmAssignment($event)">
+                    Assign
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2 mt-2">
+      <div class="bg-[#ebebec] p-2 rounded-xl border-[2px] border-white flex justify-between items-center">
+        <div class="ps-2 w-full">
+          <div class="text-sm text-black font-medium">Estimation</div>
+          <div class="relative flex items-center">
+            
+            <input 
+              type="text"
+              [value]="getFormattedRevenue()"
+              (input)="onRevenueInput($event)"
+              class="w-full  outline-none text-xl font-bold bg-transparent border-none focus:ring-0"
+              (keypress)="onlyNumber($event)"
+              placeholder="0"
+            />
+          </div>
+        </div>
+        <img class="w-14 h-14" src="assets/lead/Rupee.svg" />
+      </div>
+      <div class="bg-[#b9e8e2] p-2 rounded-xl flex justify-between items-center border-[2px] border-white">
+        <div class="ps-2">
+          <div class="text-sm text-black font-medium">Lead Scores</div>
+          <div class="text-xl font-bold text-black mt-1">
+            {{ leadDetails?.score | number:'1.2-2' }}%
+            <span class="inline-flex items-center">
+              <img src="assets/lead/lowImpact-dropdown.svg" class="h-3 w-3">
+            </span>
+          </div>
+        </div>
+        <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs xl:text-[10px]  2xl:text-xs font-semibold">Low Impact</span>
+      </div>
+    </div>
+
+    <div class="mt-2 overflow-y-auto [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0">
+      <div class="flex">
+        <button class="px-3 py-2 font-semibold transition-all" [class.bg-[#FFFFFF66]]="activeTab === 'details'"
+          [class.text-gray-900]="activeTab === 'details'" [class.text-gray-500]="activeTab !== 'details'"
+          [class.rounded-t-lg]="activeTab === 'details'" [class.rounded-none]="activeTab !== 'details'"
+          [style.borderRadius]="
+            activeTab === 'details' ? '10px 10px 0px 0px' : '0px'
+          " (click)="activeTab = 'details'">
+          Details Info
+        </button>
+
+        <button class="px-3 py-2 font-medium transition-all" [class.bg-[#FFFFFF66]]="activeTab === 'contact'"
+          [class.text-gray-900]="activeTab === 'contact'" [class.text-gray-500]="activeTab !== 'contact'"
+          [class.rounded-t-lg]="activeTab === 'contact'" [class.rounded-none]="activeTab !== 'contact'"
+          [style.borderRadius]="
+            activeTab === 'contact' ? '10px 10px 0px 0px' : '0px'
+          " (click)="activeTab = 'contact'">
+          Contact Details
+        </button>
+      </div>
+
+      <div
+        class="flex bg-white/50 rounded-lg px-2 py-2 mb-2 text-left w-full bg-clip-border [border-image-source:linear-gradient(138.39deg,#FFFFFF_1.92%,#FFFFFF_20.3%)] [border-image-slice:1]"
+        *ngIf="activeTab === 'details'">
+        <form [formGroup]="updateForm" [ngStyle]="{ width: '100%' }">
+          <div class="space-y-2 p-3">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex items-center">
+                <img src="assets/New-Icons/user.svg" class="w-4 h-4 mr-3" alt="" />
+                <div class="flex-grow">
+                  <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black mb-1">Lead Name <span class="text-red-500">*</span></label>
+                  <input type="text" formControlName="companyName"
+                    class="w-full outline-none focus:px-4 text-xs  2xl:text-xs xl:text-[10px]  focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs xl:placeholder:text-[10px] 2xl:placeholder:text-xs"
+                    placeholder="Enter Lead Name" 
+                    (keypress)="onlyLettersForLeadName($event)"
+                    (input)="formatLeadName($event)" />
+                  <div *ngIf="updateForm.get('companyName')?.invalid && (updateForm.get('companyName')?.dirty || updateForm.get('companyName')?.touched)" class="text-red-500 text-xs mt-1">
+                    <span *ngIf="updateForm.get('companyName')?.errors?.['required']">Lead name is required.</span>
+                    <span *ngIf="updateForm.get('companyName')?.errors?.['invalidLeadName']">Please enter only letters (no numbers allowed).</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <img src="assets/New-Icons/mail.svg" class="w-4 h-4 mr-3" alt="" />
+                <div class="flex-grow">
+                  <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black mb-1">Email Address <span class="text-red-500">*</span></label>
+                  <input type="text" formControlName="companyEmail"
+                    class="w-full outline-none focus:px-4  text-xs  2xl:text-xs xl:text-[10px] focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs xl:placeholder:text-[10px] 2xl:placeholder:text-xs"
+                    placeholder="Enter Email Address" />
+                  <div *ngIf="updateForm.get('companyEmail')?.invalid && (updateForm.get('companyEmail')?.dirty || updateForm.get('companyEmail')?.touched)" class="text-red-500 text-xs mt-1">
+                    <span *ngIf="updateForm.get('companyEmail')?.errors?.['required']">Email is required.</span>
+                    <span *ngIf="updateForm.get('companyEmail')?.errors?.['email']">Please enter a valid email address.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex items-center">
+                <img src="assets/New-Icons/call.svg" class="w-4 h-4 mr-3" alt="" />
+                <div class="flex-grow">
+                  <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black mb-1">Mobile Number <span class="text-red-500">*</span></label>
+                  <input type="text" formControlName="companyMobileNumber"
+                    class="w-full outline-none focus:px-4 text-xs  2xl:text-xs xl:text-[10px]  focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs xl:placeholder:text-[10px] 2xl:placeholder:text-xs"
+                    placeholder="Enter Mobile Number" 
+                    (keypress)="onlyNumbersForMobile($event)"
+                    (input)="formatMobileNumber($event)" />
+                  <div *ngIf="updateForm.get('companyMobileNumber')?.invalid && (updateForm.get('companyMobileNumber')?.dirty || updateForm.get('companyMobileNumber')?.touched)" class="text-red-500 text-xs mt-1">
+                    <span *ngIf="updateForm.get('companyMobileNumber')?.errors?.['required']">Mobile number is required.</span>
+                    <span *ngIf="updateForm.get('companyMobileNumber')?.errors?.['invalidMobile']">Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <img src="assets/New-Icons/internet.svg" class="w-4 h-4 mr-3" alt="" />
+                <div class="flex-grow">
+                  <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black mb-1">Website </label>
+                  <input type="text" formControlName="companyWebsite"
+                    class="w-full outline-none focus:px-4 text-xs  2xl:text-xs xl:text-[10px] focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs placeholder:xl:text-[10px]  2xl:text-xs"
+                    placeholder="Enter Website" />
+                  <div *ngIf="updateForm.get('companyWebsite')?.invalid && (updateForm.get('companyWebsite')?.dirty || updateForm.get('companyWebsite')?.touched)" class="text-red-500 text-xs mt-1">
+                    <span *ngIf="updateForm.get('companyWebsite')?.errors?.['invalidWebsite']">Please enter a valid website URL.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="relative w-full md:w-auto">
+                <span class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black ml-7">Industry</span>
+                <div class="flex items-center">
+                  <img src="assets/New-Icons/building.svg" class="w-4 h-4 mr-3 mb-3" alt="" /> 
+                  <button (click)="isIndustryDropdownOpen = !isIndustryDropdownOpen"
+                    class="justify-between flex text-sm bg-transparent text-center focus:px-4  focus:py-1 hover:bg-opacity-70 transition-all w-full focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] font-semibold border-transparent rounded-full">
+                    <span 
+                    [ngClass]="selectedIndustry === 'Select Industry Type' ? 'text-[#7A7A7A] text-xs xl:text-[10px]  2xl:text-xs font-normal' : 'font-semibold text-black'"
+
+                    [attr.title]="selectedIndustry.length > 15 ? selectedIndustry : null"
+                    class="truncate w-38 inline-block align-middle text-xs  2xl:text-xs xl:text-[10px]">
+                    {{ selectedIndustry || 'Select Industry Type' }}
+                  </span>
+                  
+                    <svg *ngIf="isIndustryDropdownOpen" class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                      [ngClass]="{'rotate-180': isIndustryDropdownOpen}" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              
+                <div *ngIf="isIndustryDropdownOpen" class="absolute mt-1 w-60 bg-white border border-gray-200 rounded-lg shadow-lg 
+                    overflow-y-auto max-h-60 z-50 
+                    scrollbar-thin scrollbar-w-[4px] scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+                  <div class="py-2">
+                    <div *ngFor="let type of industries" (click)="selectIndustry(type)"
+                      class="px-4 py-2  text-xs  2xl:text-xs xl:text-[10px] hover:bg-black-100 cursor-pointer hover:bg-black rounded mx-2 my-1 hover:text-white">
+                      {{ type }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
+              <div class="flex items-center p-1">
+                <img src="assets/New-Icons/user-group.svg" class="w-4 h-4 mr-3" alt="" />
+                <div class="flex-grow">
+                  <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black">Company Size</label>
+                  <input type="text" formControlName="companySize"
+                    class="w-full outline-none focus:px-4  focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200 placeholder:font-[400]  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs"
+                    placeholder="Enter Company Size" />
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+              <div class="flex items-center p-1">
+                <img src="assets/lead/location.svg" class="w-4 h-4 mr-3" alt="" />
+                <div class="flex-grow">
+                  <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black mb-1">Location</label>
+                  <textarea type="text" formControlName="address"
+                    class="border-1 border-[#DEDEDE] rounded-xl w-full outline-none focus:px-4  focus:py-1  p-2 bg-transparent peer focus:!bg-transparent focus:ring-![0.5px] focus:ring-[#000000] focus:border-[#000000] focus:!border-[0.5px] font-[500]  rounded-lg transition-all duration-200 resize-none  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs"
+                    placeholder="Enter Company Size"></textarea>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black">Social Media Links</label>
+              <div formGroupName="social_media_url">
+                <div class="grid grid-cols-2 gap-3 mt-1">
+                  <div *ngFor="let field of ['linkedin', 'instagram', 'facebook', 'twitter']">
+                    <div
+                      class="flex items-center border-1 border-[#DEDEDE] rounded-full bg-transparent focus-within:!border-[#000000] focus-within:!bg-transparent font-medium relative"
+                      [ngClass]="{
+                        'border-red-500 focus-within:ring-red-500': invalidFields.includes(field)
+                      }">
+
+                      <button type="button" (click)="focusInput(field)" class="p-2">
+                        <img [src]="dynamicIcons[field]" width="20px" alt="{{ field | titlecase }}" />
+                      </button>
+
+                      <input #inputRef type="text" class="w-full py-2 bg-transparent outline-none rounded-full pr-10  text-xs  2xl:text-xs xl:text-[10px]  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs"
+                        [placeholder]="'Enter ' + field.charAt(0).toUpperCase() + field.slice(1) + ' Profile URL'"
+                        formControlName="{{ field }}" (change)="updateSocialMedia($event, field)" />
+
+                      <button *ngIf="validSocialLinks[field]" type="button" (click)="copyToClipboard(field)"
+                        class="absolute right-3">
+                        <img src="../../../../assets/lead/copy.png">
+                      </button>
+                    </div>
+
+                    <div *ngIf="invalidFields.includes(field)" class="text-red-500 text-xs xl:text-[10px]  2xl:text-xs mt-1">
+                      Please enter a valid {{ field | titlecase }} URL.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-2">
+              <label for="hashtagInput" class="text-xs xl:text-[10px]  2xl:text-xs font-normal">Service Interest</label>
+              <div class="relative w-full mt-1">
+                <div
+                  class="flex flex-wrap gap-2 border-1 border-[#DEDEDE] rounded-[10px] p-2 focus-within:bg-transparent  focus-within:ring-[#000000] focus-within:!border-[0.5px] focus-within:border-[#000000]">
+                  <span *ngFor="let tag of serviceInterests; let i = index"
+                    class="flex items-center gap-2 bg-[#CDCDCD] px-3 py-1 rounded-full text-sm font-medium">
+                    #{{ tag }}
+                    <span class="cursor-pointer" (click)="removeTag(i)">
+                      <img src="assets/New-Icons/Clear.svg" class="w-4 h-4" alt="Remove" />
+                    </span>
+                  </span>
+
+                  <input type="text" id="hashtagInput"
+                    class="w-25 outline-none p-1 bg-transparent peer focus:bg-white border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs"
+                    placeholder="Search Here..." [(ngModel)]="searchTerm" [ngModelOptions]="{ standalone: true }"
+                    (input)="filterHashtags()" (keydown.enter)="addServiceInterest($event)"
+                    (focus)="showDropdown = true" autocomplete="off" />
+                </div>
+                <div *ngIf="showDropdown && filteredHashtags.length > 0"
+                  class="absolute top-full left-0 w-full bg-white rounded-lg shadow-md max-h-[200px] overflow-y-auto z-50 p-1"
+                  aria-live="polite">
+                  <div *ngFor="let tag of filteredHashtags" (click)="selectHashtag(tag)"
+                    class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white"
+                    [class.selected]="serviceInterests.includes(tag)">
+                    {{ tag }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <label class="text-xs xl:text-[10px]  2xl:text-xs font-normal peer-focus:text-black">Comments</label>
+            <textarea
+              class="w-full p-3 border-1 border-[#DEDEDE] focus:!border-[0.5px] rounded-xl bg-transparent !scrollbar-thin   bg-gray-100 text-sm font-normal outline-none focus:!bg-transparent focus:ring-![0.5px] focus:ring-[#000000] focus:border-[#000000]  resize-none
+             mr-1 mb-1 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs
+"
+              formControlName="comments" placeholder="Enter your comments here..." rows="3"></textarea>
+          </div>
+          <div class="flex justify-end gap-2 mt-4 mb-4">
+            <button class="px-4 py-2 rounded-full border border-gray-400 text-gray-600 bg-gray-100 hover:bg-gray-200"
+              (click)="close()">
+              Cancel
+            </button>
+            <button class="px-4 py-2 rounded-full bg-black text-white hover:bg-gray-800" (click)="updateLead()">
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div
+        class="flex lg:min-h-screen sm:min-h-screen bg-white/50 rounded-lg mb-2 text-left w-full bg-clip-border [border-image-source:linear-gradient(138.39deg,#FFFFFF_1.92%,#FFFFFF_20.3%)] [border-image-slice:1]"
+        *ngIf="activeTab === 'contact'">
+        <div class="p-2 w-full">
+          <div
+            class="mt-2 backdrop-blur-[74px] border border-[#6F6F6F] backdrop-blur-[74px] bg-[#FFFFFF80] p-3 rounded-lg mb-2"
+            *ngFor="let contact of contacts.controls; let i = index" [formGroup]="contact">
+            <div class="relative w-fit">
+              <div
+                class="font-medium text-white bg-black rounded-full px-3 py-2 mb-4 text-left flex items-center gap-2 cursor-pointer"
+                (click)="togglePrimaryDropdown(i)">
+                {{ contact.get('label')?.value }}
+                <img src="assets/lead/contact-dropdown.svg" class="h-5 w-5">
+              </div>
+            
+              <!-- Dropdown -->
+              <div
+                *ngIf="dropdownPrimaryOpen[i]"
+                class="absolute top-full mt-1 left-0 bg-white border border-gray-300 rounded shadow z-10 w-40">
+                <div
+                  *ngFor="let option of dropdownOptions"
+                  (click)="selectOption(i, option)"
+                  class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  {{ option }}
+                </div>
+              </div>
+            </div>
+            
+            <!-- <div
+              class="font-medium text-white bg-black rounded-full px-3 py-2 mb-4 text-left w-fit flex items-center gap-2">
+              {{ contact.get("label")?.value }}
+              <img src="assets/lead/contact-dropdown.svg" class="h-5 w-5">
+            </div> -->
+
+            <div class="grid grid-cols-2 gap-4">
+              <div *ngFor="let field of ['name', 'job_title']" class="flex items-center gap-3">
+                <img src="assets/New-Icons/user.svg" class="w-5 h-5" alt="User Icon" />
+                <div class="flex-1">
+                  <label class="text-sm text-gray-600 font-medium block">
+                    {{
+                    field === "name" ? "Contact Person" : "Role/Designation"
+                    }}
+                  </label>
+                  <input type="text" [formControl]="getFormControl(contact, field)"  [placeholder]="field === 'name' ? 'Enter Contact Person' : 'Enter Role/Designation'" 
+                    [class.border-red-500]="isFieldInvalid(contact, field)"
+                    [class.focus:ring-red-500]="isFieldInvalid(contact, field)"
+                    [class.focus:border-red-500]="isFieldInvalid(contact, field)"
+                    class="w-full outline-none focus:px-4  focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs" />
+                  <div *ngIf="isFieldInvalid(contact, field)" class="text-red-500 text-xs mt-1">
+                    {{ getFieldErrorMessage(contact, field) }}
+                  </div>
+                </div>
+              </div>
+
+              <div *ngFor="let field of ['email', 'phone']" class="flex items-center gap-3">
+                <img [src]="
+                    'assets/New-Icons/' +
+                    (field === 'email' ? 'mail' : 'call') +
+                    '.svg'
+                  " class="w-5 h-5" alt="Icon" />
+                <div class="flex-1">
+                  <label class="text-sm text-gray-600 font-medium block">
+                    {{ field === "email" ? "Email" : "Phone Number" }}
+                  </label>
+                  <input 
+                    type="text" 
+                    [formControl]="getFormControl(contact, field)"  
+                    [placeholder]="field === 'email' ? 'Enter Email Address' : 'Enter Phone Number'"
+                    [class.border-red-500]="isFieldInvalid(contact, field)"
+                    [class.focus:ring-red-500]="isFieldInvalid(contact, field)"
+                    [class.focus:border-red-500]="isFieldInvalid(contact, field)"
+                    (input)="field === 'phone' ? formatPhoneNumber($event, contact) : null"
+                    (keypress)="field === 'phone' ? onlyNumbers($event) : null"
+                    (paste)="field === 'phone' ? onPhonePaste($event, contact) : null"
+                    class="w-full outline-none focus:px-4  focus:py-1 bg-transparent peer focus:!bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:px-3 font-semibold  focus:outline-none  border-transparent rounded-full transition-all duration-200  placeholder:text-[#7A7A7A] placeholder:text-xs xl:text-[10px]  2xl:text-xs" />
+                  <div *ngIf="isFieldInvalid(contact, field)" class="text-red-500 text-xs mt-1">
+                    {{ getFieldErrorMessage(contact, field) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-end gap-2 mt-4">
+              <button *ngIf="!contact.value.id || contact.value.id === 0"
+                      class="px-4 py-2 rounded-full bg-black text-white hover:bg-gray-800"
+                      (click)="saveContact(contact, i)">
+                Save
+              </button>
+              <button *ngIf="contact.value.id && contact.value.id !== 0"
+                      class="px-4 py-2 rounded-full bg-black text-white hover:bg-gray-800"
+                      (click)="updateContact(contact, i)">
+                Update
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-end mt-4 mb-3" *ngIf="contacts.length < 10">
+            <button class="px-3 py-2.5  rounded-full bg-black text-white hover:bg-gray-800" (click)="addContact()">
+              Add Contact
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full  xl:w-1/2 p-2">
+    <span (click)="close()" class="absolute top-2 right-2 cursor-pointer z-10 mb-1">
+      <img src="assets/lead/close-button.svg" class="w-6 h-6" />
+    </span>
+    <div *ngIf="hasActivities()" class="flex flex-wrap items-center rounded-full bg-white p-1 font-urbanist mt-4">
+      <ng-container *ngFor="let stage of progressStages; let i = index">
+        <div class="flex items-center">
+          <button class="text-xs xl:text-[10px]  2xl:text-xs font-bold text-white rounded-full relative flex justify-center items-center 
+                 min-w-[90px] 2xl:!min-w-[100px] md:min-w-[75px] lg:min-w-[60px] px-[20px] 2xl:!px:[30px] py-2 z-[50]"
+            [ngClass]="{
+              'step-success': stage === 'New',
+              'step-primary': stage === 'Contacted',
+              'step-dark': stage === 'Qualified',
+              'step-purple': stage === 'Negotiation',
+              'step-secondary': stage === 'Won',
+              'step-danger': stage === 'Lost',
+              'opacity-50': progressStages.indexOf(stage) > progressStages.indexOf(currentStage.name)
+            }" [ngStyle]="{
+              'marginRight': stage === progressStages[progressStages.length - 1] ? '0' : '-5px',
+              'zIndex': progressStages.length - progressStages.indexOf(stage)
+            }">
+
+            <span class="absolute left-1" [ngClass]="{ 'ms-0': stage === 'New', 'ms-1': stage !== 'New' }">
+              <img class="w-5 h-5" src="assets/lead/status-nav.svg">
+            </span>
+
+            <span class="2xl:!ps-3" [ngClass]="{ 
+              'ps-2': stage.length > 7 || stage.length < 5 
+            }" class="text-xs xl:text-[10px]  2xl:text-xs md:text-[10px] lg:text-[10px] 2xl:!text-[12px]">
+              {{ stage | titlecase }}
+            </span>
+            <span *ngIf="stage !== 'Lost'" class="absolute right-[-9px] top-1/2 transform -translate-y-1/2 z-[60]">
+              <img class="w-6 h-6" [src]="i === progressStages.indexOf(currentStage.name) 
+              ? 'assets/lead/single-status-icon.svg' 
+              : 'assets/lead/tick.svg'"
+                [ngClass]="{ 'cursor-pointer': i === progressStages.indexOf(currentStage.name) }"
+                (click)="i === progressStages.indexOf(currentStage.name) ? openDropdown(stage) : null">
+            </span>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="dropdownOpen && hasActivities()" class="mt-3 p-2 rounded bg-gradient-to-r from-gray-300 via-gray-200 to-green-100 ">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+        <div class="md:col-span-4">
+          <div
+            class="bg-gradient-to-b from-[#F9E7E7] via-[#F8F4F4] to-[#F6F6F6] from-red-100 to-gray-100  rounded-lg font-[urbanist]">
+            <div *ngFor="let stage of stages" class="cursor-pointer p-2 m-1 text-sm font-medium transition-all duration-200 ease-in-out 
+                        rounded-md hover:bg-black hover:text-white relative 
+                        data-[selected]:bg-black data-[selected]:text-white"
+              [attr.data-selected]="stage.name === selectedStatus ? 'true' : null" (click)="selectStage(stage)">
+              {{ stage.name | titlecase}}
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-8 relative">
+          <div class="relative h-full">
+            <textarea [(ngModel)]="comment" [ngModelOptions]="{standalone: true}"
+              class="w-full p-4 pr-20 h-full rounded-lg bg-gradient-to-r from-gray-100 to-green-100 text-gray-800 text-sm font-medium resize-none"
+              placeholder="Type your comment here">
+            </textarea>
+            <div class="absolute right-2 bottom-3 flex space-x-2">
+              <button class="text-gray-800 px-3 py-1" (click)="closeStageDropdown()">Cancel</button>
+              <button class="bg-black text-white px-3 py-1 rounded-md" (click)="saveStage()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2 mt-4" *ngIf="!dropdownOpen">
+      <div class="bg-[#f1b4b9] p-2 rounded-xl text-[#333] border border-white" *ngIf="upcomingMeeting">
+        <div class="font-medium text-gray-800">Upcoming Meeting</div>
+        <div class="flex items-center gap-2 mt-2">
+          <img src="assets/lead/google-meet.svg" alt="Google Meet" class="w-10 h-10" />
+          <div>
+            <div class="font-[400] text-xs xl:text-[10px]  2xl:text-xs  text-[#1C0D0D]">Google Meet Call</div>
+            <div class="font-[600] text-[10px]  text-[#1C0D0D] ">
+              Jan 24, 2024, 12:00 AM
+            </div>
+          </div>
+        </div>
+        <button class="bg-black text-white flex items-center justify-center px-4 py-2 rounded-full mt-2 mb-1 w-full"
+          (click)="saveStage()">
+          <img src="assets/lead/meet-button-icon.svg" alt="Join" class="w-4 h-4" />
+          <span class="ml-2">Join Now</span>
+        </button>
+      </div>
+      <div class="bg-[#f1b4b9] p-2 rounded-xl text-[#333] border border-white" *ngIf="!upcomingMeeting">
+        <div class="max-w-md w-full text-center mt-2">
+          <img src="assets/lead/Calendar_empty.png" alt="No Meetings" class="mx-auto w-15 h-15" />
+          <div class="font-[600] text-sm  text-[black]">No upcoming meetings</div>
+          <div class="text-xs xl:text-[10px]  2xl:text-xs font-[400] text-[black] mb-2">Start scheduling your meetings.</div>
+        </div>
+      </div>
+      <div class="bg-[#daf4aa] p-2 rounded-xl  border border-white" *ngIf="pinnedNote">
+        <div class="font-semibold text-gray-800 ps-2 text-base">Next Step</div>
+        <div class="flex items-center gap-2 m-2">
+          <span><img src="assets/lead/next-step.svg" class="w-10" /></span>
+          <div class="">
+            <div class="font-semibold text-sm text-gray-900">
+              {{ pinnedNote?.title | titlecase }}
+            </div>
+            <div class="text-[12px] font-normal text-[#868686]" 
+                 [title]="pinnedNote?.description | titlecase">
+              {{ (pinnedNote?.description | titlecase) | slice:0:50 }}{{ pinnedNote?.description?.length > 80 ? '...' : '' }}
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-[#1C0D0DB2] mt-1">
+          {{ pinnedNote?.body }}
+        </p>
+      </div>
+      <div class="bg-[#daf4aa] p-2 rounded-xl border border-white" *ngIf="!pinnedNote">
+        <div class="max-w-md w-full text-center mt-2">
+          <img src="../../../../assets/lead/Document_empty.png" alt="No Meetings" class="mx-auto w-15 h-15" />
+          <div class="font-[600] text-sm  text-[black]">No notes available</div>
+          <div class="text-xs xl:text-[10px]  2xl:text-xs font-[400] text-[black] mb-2">Start creating your notes.</div>
+        </div>
+      </div>
+    </div>
+ <app-activity 
+  [leadId]="viewId" 
+  [activityData]="activityDetails"
+  [statusHistory]="statusData"
+  (getByIdApiTrigger)="getCombinedActivityAndStatus($event)">
+</app-activity>
+  </div>
+</ng-template>
+</div>

@@ -1,0 +1,417 @@
+.paginator-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border: 1px solid;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: hidden;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+
+.custom-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Consistent spacing between buttons */
+}
+
+.pagination-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px; /* Fixed width for consistency */
+  height: 32px; /* Fixed height for consistency */
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pagination-button:hover {
+  background-color: #f0f0f0;
+  border-color: #aaa;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  background-color: #e9ecef;
+  border-color: #ccc;
+  color: #aaa;
+}
+
+.pagination-arrow {
+  width: 20px; /* Adjusted size for alignment */
+  height: 20px; /* Adjusted size for alignment */
+  object-fit: contain; /* Ensures proper scaling */
+}
+
+.custom-pagination button {
+  border: 1.08px solid rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  padding: 10px;
+  color: black;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  margin: 5px;
+  width: 40px;
+  height: 40px;
+}
+
+.custom-pagination button:disabled {
+  border-radius: 50%;
+  padding: 10px;
+  color: #FFFFFF;
+  background-color: black !important;
+  cursor: default;
+  width: 40px;
+  height: 40px;
+}
+
+.custom-pagination button img {
+  width: 24px;
+  height: 24px;
+  // margin-top: -4px;
+  // margin-left: -3px;
+}
+
+#pageSize {
+  background-color: #f8f8fa;
+  border-radius: 25px;
+  border: 1px solid #FFFFFF;
+  padding: 7px 0px 7px 6px;
+}
+
+.details {
+  color: #1C0D0D;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.custom-pagination button {
+  transition: all 0.3s ease;
+}
+
+::ng-deep.custom-select:hover {
+  border: 1.02px solid rgba(255, 255, 255, 1) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+::ng-deep.custom-select:focus {
+  border: 1.02px solid rgba(255, 255, 255, 1) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none !important;
+  border-radius: 20px;
+  padding: 7px 31px 7px 7px !important;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  border: 1.02px solid rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  width: 62px;
+  text-align: left;
+  background-image: url('/assets/pagination/pgination-dropdownArrow.svg');
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 11px;
+}
+
+::ng-deep option {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  color: black
+}
+
+@media only screen and (min-width: 2000px) and (max-width: 1400px) {
+  .details {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+  }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1401px) {
+  .details {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  .details {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 991px) {
+  .details {
+    font-size: 12px;
+  }
+}
+@media only screen and (min-width: 675px) and (max-width: 768px) {
+  .paginator-container {
+    display: flex !important;
+}
+.custom-pagination{
+  margin-top: 0px !important;
+}
+}
+@media only screen and (min-width: 235px) and (max-width: 674px) {
+
+  .paginator-container {
+    display: block !important;
+}
+
+
+}
+
+@media only screen and (min-width: 235px) and (max-width: 768px) {
+  .details {
+    font-size: 14.8px;
+  }
+  
+.custom-form-field{
+display: none !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  width: 78% !important;
+  z-index: 0;
+}
+
+.pageSize {
+  margin: 0px !important;
+}
+
+.custom-pagination button {
+   padding: 0px !important; 
+  font-size: 12px !important;
+  margin: 4px !important;
+  width: 44px !important;
+  height: 44px !important;
+}
+
+.custom-pagination button:disabled {
+  padding: 0px !important;
+  width: 44px !important;
+  height: 44px !important;
+}
+}
+
+
+::ng-deep .custom-form-field .mat-mdc-select-placeholder {
+  color: #7D7C86 !important;
+  font-family: Urbanist !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.custom-form-field {
+  width: 75px !important;
+  height: 48px !important;
+}
+    
+::ng-deep.mat-mdc-select-panel {
+  max-height: 100px;
+}
+::ng-deep .mat-select-arrow-wrapper {
+  background-image: url('/assets/pagination/pgination-dropdownArrow.svg');
+}
+
+::ng-deep .mat-mdc-select-panel {
+  --mat-select-panel-background-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(74px) !important;
+  border-radius: 12px !important;
+  border: 0.5px solid #fff !important;
+  transform: translateY(-5px);
+  transition: all 0.3s;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+  margin-left: -19px;
+  background-color: transparent;
+}
+
+::ng-deep .custom-form-field .mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 24px !important;
+}
+
+::ng-deep .custom-form-field .mdc-notched-outline {
+  position: absolute;
+  top: 10px;
+  height: 65%;
+}
+
+::ng-deep .custom-form-field.mat-form-field-appearance-outline {
+  --mat-form-field-outline-color: rgba(255, 255, 255, 1);
+  --mat-form-field-label-color: #7D7C86;
+}
+
+::ng-deep .custom-form-field.mat-form-field.mat-focused .mat-form-field-outline {
+  color: #7D7C86;
+  font-family: Urbanist;
+  font-size: clamp(12px, 14px, 16px) !important;
+  font-weight: 700 !important;
+}
+
+::ng-deep .mat-mdc-option {
+  font-size: clamp(12px, 14px, 16px) !important;
+  font-weight: 700 !important;
+  line-height:-2 !important;
+  padding: 0px 5px 0px 5px !important;
+  margin: -15px 5px -15px 5px !important;
+  font-family: urbanist !important;
+  max-height: 50px;
+}
+
+::ng-deep .mat-mdc-option:focus:not(.mdc-list-item--disabled) {
+  --mat-option-focus-state-layer-color: #f4f7f6 !important;
+  border: 1px solid #FFFFFF !important;
+  border-radius: 10px !important;
+}
+
+.mat-mdc-option:focus.mdc-list-item,
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item {
+  background-color: transparent !important;
+}
+
+
+::ng-deep .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  --mat-option-hover-state-layer-color: #f4f7f6 !important;
+  border: 1px solid #FFFFFF !important;
+  border-radius: 10px !important;
+}
+
+::ng-deep .custom-form-field .mat-mdc-select-arrow-wrapper .mat-mdc-select-arrow svg {
+  display: none;
+}
+
+::ng-deep .custom-form-field .mat-mdc-select-arrow-wrapper {
+  position: relative;
+}
+
+::ng-deep .custom-form-field .mat-mdc-select-arrow-wrapper::after {
+  content: '';
+  background: url('/assets/pagination/pgination-dropdownArrow.svg') no-repeat center;
+  background-size: contain;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+::ng-deep .custom-scrollbar {
+  max-height: 100px !important; 
+  overflow-y: auto !important;
+}
+
+::ng-deep .custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+::ng-deep .custom-scrollbar::-webkit-scrollbar-thumb {
+  background:  #1C0D0D ; 
+  border-radius: 10px;
+}
+
+::ng-deep .custom-scrollbar::-webkit-scrollbar-track {
+  background: #f2f2f2; 
+}
+
+::ng-deep .mat-mdc-select-value-text {
+  font-family: Urbanist !important;
+  font-size: clamp(12px, 14px, 16px) !important;
+  font-weight: 700 !important;
+}
+
+
+.mat-mdc-form-field-subscript-wrapper {
+  display: flex !important;
+
+}
+
+/* Hide scrollbar arrows in WebKit browsers (Chrome, Edge, Safari) */
+.mat-mdc-select-panel::-webkit-scrollbar-button {
+  display: none; 
+}
+
+/* Customize the scrollbar appearance */
+.mat-mdc-select-panel::-webkit-scrollbar {
+  width: 6px; /* Adjust scrollbar width */
+}
+
+.mat-mdc-select-panel::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Scrollbar color */
+  border-radius: 10px;
+}
+
+.mat-mdc-select-panel::-webkit-scrollbar-track {
+  background: transparent; /* Hide scrollbar track */
+}
+
+/* For Firefox */
+.mat-mdc-select-panel {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+
+
+/* Apply styles to the dropdown panel */
+::ng-deep .custom-scrollbar {
+  overflow-y: auto;
+}
+
+/* Webkit-based browsers (Chrome, Edge, Safari) */
+::ng-deep .custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Adjust the scrollbar width (height of the bar) */
+}
+
+::ng-deep .custom-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Track color */
+}
+
+::ng-deep .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #a1a0a0; /* Thumb color */
+  border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+::ng-deep .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Hover color for the thumb */
+}
+
+/* Firefox-specific styles */
+::ng-deep .custom-scrollbar {
+  scrollbar-width: thin; /* Options: auto | thin | none */
+  scrollbar-color: #c3bdbd #f0f0f0 /* Thumb color | Track color */
+}
+
+
+/* Apply styles to Material Select panel */
+.custom-scrollbar .mat-mdc-select-panel {
+  max-height: 200px;
+  overflow-y: auto; /* Enables scrolling */
+}
+
+/* General scrollbar styling */
+.custom-scrollbar .mat-mdc-select-panel::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+}
+

@@ -1,0 +1,30 @@
+
+<div class="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-[#2B2C33] 
+      [background-image:linear-gradient(#545454_1px,transparent_1px),linear-gradient(90deg,#545454_1px,transparent_1px)] [background-size:45px_45px] 2xl:[background-size:70px_70px]">
+
+  <div
+    class="md:w-1/2 flex flex-col justify-center items-center p-3 2xl:p-0 m-3 xl:m-2 2xl:m-1 overflow-hidden xl:m-1 xl:p-0  2xl:flex-grow bg-white  rounded-xl">
+    <div class="max-w-md w-full">
+      <div *ngIf="currentView === 'signup'">
+        <app-sign-up (signupSuccess)="onSignupSuccess()"></app-sign-up>
+      </div>
+      <div *ngIf="currentView === 'login'">
+        <app-login (loginSuccess)="onLoginSuccess($event)"></app-login>
+      </div>
+      <div *ngIf="currentView === 'otp'">
+        <app-otp-verification [email]="email"></app-otp-verification>
+      </div>
+    </div>
+  </div>
+
+  <div class="md:w-1/2 hidden md:flex justify-center items-center p-3 ">
+    <div class="w-full h-full flex justify-center items-center">
+      <img 
+        src="assets/login/login.png" 
+        class="w-full h-auto max-h-full object-contain"
+      />
+    </div>
+  </div>
+  
+  
+</div>

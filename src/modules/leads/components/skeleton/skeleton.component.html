@@ -1,0 +1,474 @@
+<div *ngIf="type === 'list'" class="skeleton-list">
+  <div
+    class="w-full flex flex-col xl:flex-row bg-[radial-gradient(circle_at_20%_20%,rgba(244,235,223,1)_0%,transparent_60%),radial-gradient(circle_at_80%_20%,rgba(227,240,230,1)_0%,transparent_60%),radial-gradient(circle_at_50%_70%,rgb(150,167,253)_0%,transparent_75%),radial-gradient(circle_at_50%_80%,rgba(230,241,241,0.5)_0%,transparent_70%)] border border-white">
+    <!-- Left Column -->
+    <div class="w-full xl:w-1/2 p-2 md:p-4 bg-transparent">
+      <div
+        class="bg-gradient-to-r from-[#f4f0ea] to-[#fbf9f6] rounded-[22px] border border-white p-3 sm:p-4 md:p-6 shadow-md animate-pulse">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start mb-4 md:mb-6 gap-4">
+          <div class="flex items-center gap-3 md:gap-6">
+            <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 2xl:w-28 2xl:h-28 rounded-lg bg-gray-300"></div>
+            <div>
+              <div class="bg-gray-300 w-32 md:w-48 lg:w-64 2xl:w-72 h-4 md:h-5 rounded-full mb-3 md:mb-3"></div>
+              <div class="bg-gray-300 w-40 md:w-56 lg:w-72 2xl:w-96 h-4 md:h-5 rounded-full mb-3 md:mb-3"></div>
+              <div class="bg-gray-300 w-36 md:w-48 lg:w-64 2xl:w-72 h-4 md:h-5 rounded-full"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6 mb-4 md:mb-6">
+          <div class="bg-[#ebebec] p-4 md:p-4  rounded-xl border-2 border-white flex justify-between items-center">
+            <div>
+              <div class="bg-gray-300 w-24 md:w-32 lg:w-32 2xl:w-40 p h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+              <div class="bg-gray-300 w-32 md:w-48 lg:w-48 2xl:w-72 h-4 md:h-6 rounded-full"></div>
+            </div>
+          </div>
+          <div class="bg-[#ebebec] p-4 md:p-4 rounded-xl border-2 border-white flex justify-between items-center">
+            <div>
+              <div class="bg-gray-300 w-24 md:w-32 lg:w-32 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+              <div class="bg-gray-300 w-32 md:w-48 lg:w-48 2xl:w-72 h-4 md:h-6 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="bg-white/50 rounded-lg px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4">
+          <div class="space-y-3 md:space-y-6 p-2 sm:p-3 md:p-4">
+            <!-- Tabs -->
+            <div class="flex mb-3 md:mb-4">
+              <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-48 h-6 md:h-8 rounded-full mr-2 md:mr-3"></div>
+              <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-48 h-6 md:h-8 rounded-full"></div>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
+              <div class="flex items-center">
+
+                <div class="flex-grow">
+                  <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+                  <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full"></div>
+                </div>
+              </div>
+              <div class="flex items-center">
+
+                <div class="flex-grow">
+                  <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+                  <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
+              <div class="flex items-center">
+
+                <div class="flex-grow">
+                  <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+                  <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full"></div>
+                </div>
+              </div>
+              <div class="flex items-center">
+
+                <div class="flex-grow">
+                  <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+                  <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Textarea -->
+            <div class="flex items-center">
+
+              <div class="flex-grow">
+                <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+                <div class="bg-gray-300 w-full h-16 md:h-20 lg:h-24 2xl:h-32 rounded-xl"></div>
+              </div>
+            </div>
+
+            <!-- Social Links -->
+            <div>
+              <div class="bg-gray-300 w-28 md:w-40 lg:w-48 2xl:w-64 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-4">
+                <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full"></div>
+                <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full mb-3"></div>
+                <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full"></div>
+                <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-full mb-3"></div>
+              </div>
+            </div>
+
+            <!-- Additional Fields -->
+            <div>
+              <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+              <div class="bg-gray-300 w-full h-6 md:h-8 lg:h-10 rounded-xl"></div>
+            </div>
+            <div>
+              <div class="bg-gray-300 w-24 md:w-32 lg:w-40 2xl:w-40 h-3 md:h-4 rounded-full mb-3 md:mb-3"></div>
+              <div class="bg-gray-300 w-full h-12 md:h-16 lg:h-20 2xl:h-24 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-3 md:gap-4 mt-4 md:mt-6">
+          <div class="bg-gray-300 w-20 md:w-24 lg:w-28 2xl:w-36 h-6 md:h-8 lg:h-10 rounded-full"></div>
+          <div class="bg-gray-300 w-20 md:w-24 lg:w-28 2xl:w-36 h-6 md:h-8 lg:h-10 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="w-full xl:w-1/2 p-2 md:p-4 bg-transparent">
+      <div
+        class="bg-gradient-to-r from-[#f4f0ea] to-[#fbf9f6] rounded-[22px] border border-white p-3 sm:p-4 md:p-6 shadow-md animate-pulse h-full">
+
+        <!-- Progress Stages -->
+        <div class="flex flex-wrap items-center rounded-full bg-white p-10 sm:p-6 mb-3 md:mb-5 gap-8 sm:gap-6">
+          <div class="flex items-center">
+            <div class="bg-gray-300 w-16 sm:w-20 md:w-24 lg:w-20 2xl:w-36 h-6  md:h-7 rounded-full"></div>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-gray-300 w-16 sm:w-20 md:w-24 lg:w-20 2xl:w-36 h-6  md:h-7 rounded-full"></div>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-gray-300 w-16 sm:w-20 md:w-24 lg:w-20 2xl:w-36 h-6  md:h-7 rounded-full"></div>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-gray-300 w-16 sm:w-20 md:w-24 lg:w-20 2xl:w-36 h-6  md:h-7 rounded-full"></div>
+          </div>
+
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6 mb-4 md:mb-6">
+          <div class="bg-[#ebebec] p-3 sm:p-5 md:p-5 rounded-xl border-2  border-white">
+            <div class="flex items-center gap-2 sm:gap-3">
+              <div>
+                <div
+                  class="bg-gray-300 w-20 sm:w-24 md:w-32 mt-16 lg:w-40 2xl:w-40 h-3 sm:h-4 md:h-5 rounded-full mb-3 sm:mb-3">
+                </div>
+                <div class="bg-gray-300 w-28 sm:w-36 md:w-44 lg:w-48 2xl:w-72 h-3 sm:h-4 md:h-5 rounded-full"></div>
+              </div>
+            </div>
+            <div class="bg-gray-300 w-full h-6 sm:h-7 md:h-8 lg:h-10 2xl:h-12 rounded-full mt-3"></div>
+          </div>
+          <div class="bg-[#ebebec] p-3 sm:p-5 md:p-5 rounded-xl border-2 border-white">
+            <div class="bg-gray-300 w-28 sm:w-36 md:w-48 lg:w-48 2xl:w-72 h-4 sm:h-5 md:h-6 rounded-full mb-3"></div>
+            <div class="bg-gray-300 w-28 sm:w-36 md:w-48 lg:w-48 2xl:w-72 h-5 sm:h-6 md:h-7 rounded-full"></div>
+            <div class="bg-gray-300 w-full h-16 sm:h-20 md:h-24 lg:h-28 2xl:h-32 rounded-xl mt-3"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-5 gap-7 mb-4">
+          <div class="bg-gray-300 w-20 h-4 rounded-full bg-shimmer-gradient bg-[length:200%_100%] shimmer-wave"></div>
+          <div class="bg-gray-300 w-20 h-4 rounded-full bg-shimmer-gradient bg-[length:200%_100%] shimmer-wave"></div>
+          <div class="bg-gray-300 w-20 h-4 rounded-full bg-shimmer-gradient bg-[length:200%_100%] shimmer-wave"></div>
+          <div class="bg-gray-300 w-20 h-4 rounded-full bg-shimmer-gradient bg-[length:200%_100%] shimmer-wave"></div>
+          <div class="bg-gray-300 w-20 h-4 rounded-full bg-shimmer-gradient bg-[length:200%_100%] shimmer-wave"></div>
+        </div>
+        <div class="border-b-2 border-gray w-full"></div>
+        <!-- Activity Timeline -->
+        <div class="mt-4 md:mt-6">
+          <div class="relative">
+            <div class="absolute top-0 bottom-0 left-3 sm:left-4 md:left-5 lg:left-6 w-0.5 bg-gray-300"></div>
+            <div class="space-y-4 sm:space-y-5 md:space-y-6">
+              <!-- Timeline Items -->
+              <div class="relative pl-10 sm:pl-12 md:pl-14 lg:pl-16 2xl:pl-20">
+                <div
+                  class="absolute left-2 sm:left-3 md:left-4 lg:left-3 2xl:left-3 top-3 sm:top-4 md:top-5 lg:top-6 w-3 sm:w-4 md:w-5 lg:w-6 h-3 sm:h-4 md:h-5 lg:h-6 bg-gray-300 rounded-full">
+                </div>
+                <div class="bg-white p-4 sm:p-3 md:p-4 rounded-lg shadow-sm">
+                  <div class="bg-gray-300 w-3/4 h-4 sm:h-5 md:h-6 rounded-full mb-3"></div>
+                  <div class="bg-gray-300 w-full h-3 sm:h-4 md:h-5 rounded-full"></div>
+                </div>
+              </div>
+              <div class="relative pl-10 sm:pl-12 md:pl-14 lg:pl-16 2xl:pl-20">
+                <div
+                  class="absolute left-2 sm:left-3 md:left-4 lg:left-3 2xl:left-3 top-3 sm:top-4 md:top-5 lg:top-6 w-3 sm:w-4 md:w-5 lg:w-6 h-3 sm:h-4 md:h-5 lg:h-6 bg-gray-300 rounded-full">
+                </div>
+                <div class="bg-white p-4 sm:p-3 md:p-4 rounded-lg shadow-sm">
+                  <div class="bg-gray-300 w-3/4 h-4 sm:h-5 md:h-6 rounded-full mb-3"></div>
+                  <div class="bg-gray-300 w-full h-3 sm:h-4 md:h-5 rounded-full"></div>
+                </div>
+              </div>
+              <div class="relative pl-10 sm:pl-12 md:pl-14 lg:pl-16 2xl:pl-20">
+                <div
+                  class="absolute left-2 sm:left-3 md:left-4 lg:left-3 2xl:left-3 top-3 sm:top-4 md:top-5 lg:top-6 w-3 sm:w-4 md:w-5 lg:w-6 h-3 sm:h-4 md:h-5 lg:h-6 bg-gray-300 rounded-full">
+                </div>
+                <div class="bg-white p-4 sm:p-3 md:p-4 rounded-lg shadow-sm">
+                  <div class="bg-gray-300 w-3/4 h-4 sm:h-5 md:h-6 rounded-full mb-3"></div>
+                  <div class="bg-gray-300 w-full h-3 sm:h-4 md:h-5 rounded-full"></div>
+                </div>
+              </div>
+              <div class="relative pl-10 sm:pl-12 md:pl-14 lg:pl-16 2xl:pl-20">
+                <div
+                  class="absolute left-2 sm:left-3 md:left-4 lg:left-3 2xl:left-3 top-3 sm:top-4 md:top-5 lg:top-6 w-3 sm:w-4 md:w-5 lg:w-6 h-3 sm:h-4 md:h-5 lg:h-6 bg-gray-300 rounded-full">
+                </div>
+                <div class="bg-white p-4 sm:p-3 md:p-4 rounded-lg shadow-sm">
+                  <div class="bg-gray-300 w-3/4 h-4 sm:h-5 md:h-6 rounded-full mb-3"></div>
+                  <div class="bg-gray-300 w-full h-3 sm:h-4 md:h-5 rounded-full"></div>
+                </div>
+              </div>
+              <div class="relative pl-10 sm:pl-12 md:pl-14 lg:pl-16 2xl:pl-20">
+                <div
+                  class="absolute left-2 sm:left-3 md:left-4 lg:left-3 2xl:left-3 top-3 sm:top-4 md:top-5 lg:top-6 w-3 sm:w-4 md:w-5 lg:w-6 h-3 sm:h-4 md:h-5 lg:h-6 bg-gray-300 rounded-full">
+                </div>
+                <div class="bg-white p-4 sm:p-3 md:p-4 rounded-lg shadow-sm">
+                  <div class="bg-gray-300 w-3/4 h-4 sm:h-5 md:h-6 rounded-full mb-3"></div>
+                  <div class="bg-gray-300 w-full h-3 sm:h-4 md:h-5 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="type === 'card'" class="skeleton-list">
+
+  <div class="w-full max-w-6xl mx-auto p-3 space-y-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <div class="bg-gray-300 w-48 h-6 rounded-full animate-pulse"></div>
+      <div class="bg-gray-300 w-6 h-6 rounded-full animate-pulse"></div>
+    </div>
+  
+    <!-- Form Container -->
+    <div class="w-full p-3 bg-gradient-to-r from-[#f4f0ea] to-[#fbf9f6] rounded-[22px] border border-white shadow-sm">
+      <!-- Basic Information Section -->
+      <div class="grid md:grid-cols-2 gap-6 relative mb-6">
+        <!-- Divider Line -->
+        <div class="hidden md:block absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-px border-l border-gray-300 border-dotted z-0"></div>
+  
+        <!-- Left Column -->
+        <div class="flex flex-col gap-3 pr-6">
+          <!-- Profile Image and Name Section -->
+          <div class="flex items-start gap-3 relative">
+            <!-- Profile Image Skeleton -->
+            <div class="w-20 h-20 rounded-lg bg-gray-300 animate-pulse"></div>
+  
+            <div class="flex-1">
+              <!-- Name and Status Row -->
+              <div class="flex items-center gap-2 mb-4">
+                <div class="bg-gray-300 w-48 h-6 rounded-full animate-pulse"></div>
+                <div class="bg-gray-300 w-32 h-6 rounded-full animate-pulse"></div>
+              </div>
+  
+              <!-- Department, Designation, Employee ID, Join Date -->
+              <div class="space-y-4">
+                <div class="bg-gray-300 w-full h-4 rounded-full animate-pulse"></div>
+                <div class="bg-gray-300 w-full h-4 rounded-full animate-pulse"></div>
+                <div class="flex items-center gap-2">
+                  <div class="bg-gray-300 w-24 h-4 rounded-full animate-pulse"></div>
+                  <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="bg-gray-300 w-28 h-4 rounded-full animate-pulse"></div>
+                  <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Official Email and Reports To -->
+          <div class="text-sm pl-24 space-y-4">
+            <div class="flex gap-4 items-center">
+              <div class="bg-gray-300 w-36 h-4 rounded-full animate-pulse"></div>
+              <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+            </div>
+            <div class="flex gap-4 items-center">
+              <div class="bg-gray-300 w-28 h-4 rounded-full animate-pulse"></div>
+              <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Right Column - Personal Details -->
+        <div class="relative flex flex-col gap-3 pl-6 text-sm">
+          <!-- Gender -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+          </div>
+  
+          <!-- Mobile Number -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+          </div>
+  
+          <!-- Personal Email -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-36 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+          </div>
+  
+          <!-- Father's Name -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-28 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+          </div>
+  
+          <!-- Alternate Number -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+          </div>
+  
+          <!-- Blood Group -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-28 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+          </div>
+  
+          <!-- Marital Status -->
+          <div class="flex gap-4 items-center">
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Emergency Contact Section -->
+      <div class="grid md:grid-cols-1 gap-6 text-sm mt-6">
+        <div class="space-y-8">
+          <div>
+            <div class="bg-gray-300 w-48 h-6 rounded-full animate-pulse mb-4"></div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Primary Contact -->
+              <div>
+                <div class="bg-gray-300 w-24 h-5 rounded-full animate-pulse mb-2"></div>
+                <div class="space-y-4 mt-2">
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-28 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Secondary Contact -->
+              <div>
+                <div class="bg-gray-300 w-28 h-5 rounded-full animate-pulse mb-2"></div>
+                <div class="space-y-4 mt-2">
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-28 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Address Section -->
+          <div>
+            <div class="bg-gray-300 w-32 h-6 rounded-full animate-pulse mb-4"></div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Current Address -->
+              <div>
+                <div class="bg-gray-300 w-24 h-5 rounded-full animate-pulse mb-2"></div>
+                <div class="space-y-4">
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-16 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-12 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-start">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-full h-16 rounded-xl animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Permanent Address -->
+              <div>
+                <div class="bg-gray-300 w-28 h-5 rounded-full animate-pulse mb-2"></div>
+                <div class="space-y-4">
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-16 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-center">
+                    <div class="bg-gray-300 w-12 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+                  </div>
+                  <div class="flex gap-4 items-start">
+                    <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                    <div class="bg-gray-300 w-full h-16 rounded-xl animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Education Information Section -->
+      <div class="mt-8">
+        <div class="bg-gray-300 w-56 h-6 rounded-full animate-pulse mb-4"></div>
+        <div class="relative pl-6 border-l-2 border-gray-300 space-y-6 text-sm">
+          <!-- Education Items -->
+          <div class="relative">
+            <div class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-gray-300 animate-pulse"></div>
+            <div class="space-y-2">
+              <div class="bg-gray-300 w-64 h-4 rounded-full animate-pulse"></div>
+              <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+              <div class="flex items-center gap-2">
+                <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                <span>-</span>
+                <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-gray-300 animate-pulse"></div>
+            <div class="space-y-2">
+              <div class="bg-gray-300 w-64 h-4 rounded-full animate-pulse"></div>
+              <div class="bg-gray-300 w-48 h-4 rounded-full animate-pulse"></div>
+              <div class="flex items-center gap-2">
+                <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+                <span>-</span>
+                <div class="bg-gray-300 w-20 h-4 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Add Education Button -->
+          <div class="ml-6">
+            <div class="bg-gray-300 w-32 h-4 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Form Actions -->
+      <div class="flex justify-end gap-3 mt-8">
+        <div class="bg-gray-300 w-20 h-8 rounded-full animate-pulse"></div>
+        <div class="bg-gray-300 w-20 h-8 rounded-full animate-pulse"></div>
+      </div>
+    </div>
+  </div> 
+</div>

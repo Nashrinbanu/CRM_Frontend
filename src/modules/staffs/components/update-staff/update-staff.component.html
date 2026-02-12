@@ -1,0 +1,355 @@
+<div class="h-screen overflow-y-auto bg-gray-50">
+  <div
+    class="flex flex-wrap bg-[radial-gradient(circle_at_20%_20%,rgba(244,235,223,1)_0%,transparent_60%),radial-gradient(circle_at_80%_20%,rgba(227,240,230,1)_0%,transparent_60%),radial-gradient(circle_at_50%_70%,rgb(150,167,253)_0%,transparent_75%),radial-gradient(circle_at_50%_80%,rgba(230,241,241,0.5)_0%,transparent_70%)] border border-white">
+    <div *ngIf="isLoading; else content">
+      <app-skeleton type="card"></app-skeleton>
+    </div>
+    <ng-template #content>
+      <div class="w-full max-w-6xl mx-auto p-3 space-y-4">
+        <div class="text-xl font-bold text-black">View Staff Details</div>
+        <span (click)="close()" class="absolute top-2 right-6 cursor-pointer z-10 mb-1">
+          <img src="assets/lead/close-button.svg" class="w-6 h-6" />
+        </span>
+        <form [formGroup]="staffForm" (ngSubmit)="updateStaff()"
+          class="w-full p-3 bg-gradient-to-r from-[#f4f0ea] to-[#fbf9f6] rounded-[22px] border border-white shadow-sm">
+          <div class="grid md:grid-cols-2 gap-6 relative mb-6">
+            <div
+              class="hidden md:block absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-px border-l border-gray-300 border-dotted z-0">
+            </div>
+            <div class="flex flex-col gap-3 pr-6">
+              <div class="flex items-start gap-3 relative">
+                <label class="cursor-pointer inline-block relative w-20 h-20">
+                  <img [src]="getProfileImage(staffForm.value)" alt="Profile"
+                    class="w-20 h-20 rounded-lg object-cover border border-gray-300" />
+                  <input type="file" accept="image/*" (change)="onImageSelected($event)" hidden>
+                </label>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <input type="text" formControlName="name"
+                      class="w-full text-lg font-semibold text-black outline-none focus:!px-4    focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                    <div class="relative w-full md:w-auto">
+                      <div class="flex">
+                        <button type="button" (click)="isStatusDropdownOpen = !isStatusDropdownOpen"
+                          class="justify-between flex text-sm bg-transparent text-center focus:!px-4 focus:py-1 hover:bg-opacity-70 transition-all w-full focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] font-semibold border-transparent rounded-full">
+                          <span
+                            class="truncate w-38 text-[#888888] ps-1  inline-block align-middle text-sm 2xl:text-sm xl:text-sm font-normal"
+                            [attr.title]="staffForm.get('status')?.value?.length > 15 ? staffForm.get('status')?.value : null">
+                            {{ staffForm.get('status')?.value || 'Select Status' }}
+                          </span>
+                          <svg *ngIf="isStatusDropdownOpen"
+                            class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isStatusDropdownOpen}" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div *ngIf="isStatusDropdownOpen" class="absolute mt-1 w-60 bg-white border border-gray-200 rounded-lg shadow-lg overflow-y-auto max-h-60 z-50">
+                        <div class="py-2">
+                          <div *ngFor="let status of statuses" (click)="selectStatus(status)"
+                            class="px-4 py-2 text-xs 2xl:text-xs xl:text-[10px] hover:bg-black-100 cursor-pointer hover:bg-black rounded mx-2 my-1 hover:text-white capitalize">
+                            {{ status }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="space-y-4">
+                    <div class="flex items-center">
+                      <input type="text" formControlName="department"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                    </div>
+                    <div class="flex items-center">
+                      <input type="text" formControlName="designation"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                    </div>
+                    <div class="flex items-center ">
+                      <span class="font-semibold text-gray-800  mr-2">Employee ID : </span>
+                      <input type="text" formControlName="employeeId"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                    </div>
+                    <div class="flex items-center">
+                      <span class="font-semibold text-gray-800  mr-2">Date of Join : </span>
+                      <input type="date" formControlName="joinDate"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-sm pl-24 space-y-4">
+                <div class="flex gap-4 items-center">
+                  <div class="font-semibold text-gray-800 w-28">Official Email ID : </div>
+                  <input type="email" formControlName="officialEmail"
+                    class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1   xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm ">
+                </div>
+                <div class="flex gap-4 items-center">
+                  <div class="font-semibold text-gray-800 w-28">Reports to : </div>
+                  <div class="relative w-full">
+                    <input type="text" [formControl]="reportFilterCtrl"
+                      class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1 xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize"
+                      placeholder="Select Report To" (click)="toggleReportDropdown($event)" />
+                    <div *ngIf="isReportDropdownOpen" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-xl z-50 p-1 mt-1 max-h-48 overflow-y-auto custom-scrollbar-hide">
+                      <div *ngFor="let user of filteredReportUsersObservable | async" (click)="onReportUserChange(user)" class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                        {{ user.name }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Right Column - Personal Details -->
+            <div class="relative flex flex-col gap-3 pl-6 text-sm">
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Gender : </div>
+                <div class="relative w-full md:w-auto">
+                  <input type="text"
+                    [value]="staffForm.get('gender')?.value"
+                    readonly
+                    class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1 xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize"
+                    placeholder="Select Gender"
+                    (click)="isGenderDropdownOpen = !isGenderDropdownOpen" />
+                  <div *ngIf="isGenderDropdownOpen" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-xl z-50 p-1 mt-1 max-h-48 overflow-y-auto custom-scrollbar-hide">
+                    <div *ngFor="let gender of genders" (click)="selectGender(gender)" class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                      {{ gender }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Mobile Number : </div>
+                <input type="tel" formControlName="mobileNumber"
+                  class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+              </div>
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Personal Email ID : </div>
+                <input type="email" formControlName="personalEmail"
+                  class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm ">
+              </div>
+
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Father's Name : </div>
+                <input type="text" formControlName="fatherName"
+                  class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+              </div>
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Alternate Number : </div>
+                <input type="tel" formControlName="alternateNumber"
+                  class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+              </div>
+
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Blood Group : </div>
+                <div class="relative w-full md:w-auto">
+                  <div class="flex ">
+                    <button type="button" (click)="isBloodGroupDropdownOpen = !isBloodGroupDropdownOpen"
+                      class="justify-between flex text-sm bg-transparent text-center focus:!px-4 focus:py-1 hover:bg-opacity-70 transition-all w-full focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] font-semibold border-transparent rounded-full">
+                      <span
+                        class="truncate w-38  text-[#888888] ps-1  inline-block align-middle text-sm 2xl:text-sm xl:text-sm font-normal"
+                        [attr.title]="staffForm.get('bloodGroup')?.value?.length > 15 ? staffForm.get('bloodGroup')?.value : null">
+                        {{ staffForm.get('bloodGroup')?.value || 'Select Blood Group' }}
+                      </span>
+                      <svg *ngIf="isBloodGroupDropdownOpen"
+                        class="h-5 w-5 text-gray-600 transition-transform duration-200"
+                        [ngClass]="{'rotate-180': isBloodGroupDropdownOpen}" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div *ngIf="isBloodGroupDropdownOpen" class="absolute mt-1 w-60 bg-white border border-gray-200 rounded-lg shadow-lg 
+      overflow-y-auto max-h-60 z-50 
+      scrollbar-thin scrollbar-w-[4px] scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+                    <div class="py-2">
+                      <div *ngFor="let group of bloodGroups" (click)="selectBloodGroup(group)"
+                        class="px-4 py-2 text-xs 2xl:text-xs xl:text-[10px] hover:bg-black-100 cursor-pointer hover:bg-black rounded mx-2 my-1 hover:text-white capitalize">
+                        {{ group }}
+
+                        <!-- outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-center">
+                <div class="font-semibold text-gray-800 w-36">Marital Status : </div>
+                <div class="relative w-full md:w-auto">
+                  <input type="text"
+                    [value]="staffForm.get('maritalStatus')?.value"
+                    readonly
+                    class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1 xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000] focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize"
+                    placeholder="Select Marital Status"
+                    (click)="isMaritalStatusDropdownOpen = !isMaritalStatusDropdownOpen" />
+                  <div *ngIf="isMaritalStatusDropdownOpen" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-xl z-50 p-1 mt-1 max-h-48 overflow-y-auto custom-scrollbar-hide">
+                    <div *ngFor="let status of maritalStatuses" (click)="selectMaritalStatus(status)" class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                      {{ status }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="grid md:grid-cols-1 gap-6 text-sm mt-6">
+            <div class="space-y-8">
+              <div>
+                <div class="text-lg font-bold text-gray-900 mb-2">Emergency Contact</div>
+                <div class="grid md:grid-cols-2 gap-6">
+                  <!-- Primary Contact -->
+                  <div>
+                    <div class="text-gray-800 font-bold italic text-base mb-1">Primary</div>
+                    <div class="space-y-4 mt-2">
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-28">Name :</div>
+                        <input type="text" formControlName="primaryContactName"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-28">Relationship :</div>
+                        <input type="text" formControlName="primaryContactRelationship"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-28">Phone :</div>
+                        <input type="tel" formControlName="primaryContactPhone"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Secondary Contact -->
+                  <div>
+                    <div class="text-gray-800 font-bold italic text-base mb-1">Secondary</div>
+                    <div class="space-y-4 mt-2">
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-28">Name :</div>
+                        <input type="text" formControlName="secondaryContactName"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-28">Relationship :</div>
+                        <input type="text" formControlName="secondaryContactRelationship"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-28">Phone :</div>
+                        <input type="tel" formControlName="secondaryContactPhone"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-lg font-bold text-gray-900 mb-2 mt-8">Address</div>
+                <div class="grid md:grid-cols-2 gap-6">
+                  <!-- Current Address -->
+                  <div>
+                    <div class="text-gray-800 font-bold italic text-base mb-2">Current</div>
+                    <div class="space-y-4">
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-24">Country :</div>
+                        <input type="text" formControlName="currentCountry"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-24">State :</div>
+                        <input type="text" formControlName="currentState"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-24">City :</div>
+                        <input type="text" formControlName="currentCity"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-start">
+                        <div class="font-semibold text-gray-800 w-24">Address :</div>
+                        <textarea formControlName="currentAddress"
+                          class="font-medium text-gray-500 bg-transparent border-0 focus:border-[#000000] focus:ring-[0.5px] focus:ring-[#000000] outline-none flex-1 p-2 rounded min-h-[60px] capitalize transition-all duration-200"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Permanent Address -->
+                  <div>
+                    <div class="text-gray-800 font-bold italic text-base mb-2">Permanent</div>
+                    <div class="space-y-4">
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-24">Country :</div>
+                        <input type="text" formControlName="permanentCountry"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-24">State :</div>
+                        <input type="text" formControlName="permanentState"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-center">
+                        <div class="font-semibold text-gray-800 w-24">City :</div>
+                        <input type="text" formControlName="permanentCity"
+                          class="outline-none focus:!px-4 text-sm 2xl:text-sm text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]  focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      </div>
+                      <div class="flex gap-4 items-start">
+                        <div class="font-semibold text-gray-800 w-24">Address :</div>
+                        <textarea formControlName="permanentAddress"
+                          class="font-medium text-gray-500 bg-transparent border-0 focus:border-[#000000] focus:ring-[0.5px] focus:ring-[#000000] outline-none flex-1 p-2 rounded min-h-[60px] capitalize transition-all duration-200"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="mt-8">
+            <div class="text-lg font-bold text-gray-900  mb-4">Education Information</div>
+            <div class="relative pl-6 border-l-2 border-gray-300 space-y-6 text-sm">
+              <ng-container formArrayName="educations">
+                <div *ngFor="let education of educations.controls; let i = index" [formGroupName]="i" class="relative">
+                  <span class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-gray-300"></span>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <input type="text" formControlName="institution"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      <button type="button" (click)="removeEducation(i)" class="text-red-500 text-sm">Remove</button>
+                    </div>
+                    <input type="text" formControlName="degree"
+                      class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                    <div class="flex items-center gap-2 mt-1">
+                      <input type="text" formControlName="startYear"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                      <span>-</span>
+                      <input type="text" formControlName="endYear"
+                        class="outline-none focus:!px-4 text-sm 2xl:text-sm  text-[#888888] ps-1  xl:text-sm focus:py-1 bg-transparent peer focus:bg-transparent focus:ring-[0.5px] focus:ring-[#000000] focus:border-[#000000]   focus:outline-none border-transparent rounded-full transition-all duration-200 placeholder:text-[#7A7A7A] placeholder:text-sm xl:placeholder:text-sm 2xl:placeholder:text-sm capitalize">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <button type="button" (click)="addEducation()" class="ml-6 text-blue-500 text-sm flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Education
+              </button>
+            </div>
+          </div>
+          <!-- Form Actions -->
+          <div class="flex justify-end gap-3 mt-8">
+            <button type="button" (click)="close()"
+              class="px-6 py-2 bg-white text-black rounded-full hover:bg-gray-100">Cancel</button>
+            <button type="submit" [disabled]="isSubmitting || staffForm.invalid"
+              class="px-6 py-2 bg-black text-white rounded-full hover:bg-gray-900 flex items-center justify-center">
+              <span *ngIf="!isSubmitting">Save</span>
+              <mat-spinner *ngIf="isSubmitting" diameter="20" strokeWidth="2" class="ml-2"></mat-spinner>
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

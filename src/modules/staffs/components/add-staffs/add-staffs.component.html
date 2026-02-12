@@ -1,0 +1,915 @@
+<div class="p-3 sm:p-8">
+  <div class="p-3">
+    <div class="flex items-center text-xl sm:text-2xl font-semibold">
+      <span class="cursor-pointer" (click)="goToListPage()">
+        <img src="../../../../assets/lead/back-button.png" alt="Back">
+      </span>
+      <span class="ml-2 mb-2">{{ name }} Staff</span>
+    </div>
+  </div>
+</div>
+<div class="mx-4 p-3 sm:p-8 rounded-2xl  backdrop-blur-md shadow-lg bg-gradient-to-b from-white/50 to-white/45">
+  <div class="flex items-center justify-between pb-2">
+    <div class="flex space-x-6">
+      <div class="cursor-pointer pb-2 transition-all ps-3 pe-3 pt-3 " [ngClass]="selectedTabIndex === 0
+          ? 'text-lg font-semibold border-b-2 border-black'
+          : 'text-base font-normal border-b-2 border-transparent'" (click)="selectedTabIndex = 0">
+        Basic Info
+      </div>
+      <div class="cursor-pointer pb-2 transition-all ps-3 pe-3 pt-3" [ngClass]="selectedTabIndex === 1
+          ? 'text-lg font-semibold border-b-2 border-black'
+          : 'text-base font-normal border-b-2 border-transparent'" (click)="selectedTabIndex = 1">
+        Employment Info
+      </div>
+    </div>
+    <div class="inline-flex items-center space-x-2 px-3 py-2 bg-white rounded-full shadow-sm">
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" class="sr-only peer" [(ngModel)]="isActive" (ngModelChange)="onStatusToggle($event)">
+        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
+        <div
+          class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all peer-checked:translate-x-full">
+        </div>
+      </label>
+
+      <!-- Dynamic Label -->
+      <span class="text-sm font-semibold text-gray-800">
+        {{ selectedStatus }}
+      </span>
+    </div>
+
+
+  </div>
+  <div class="pt-2">
+    <ng-container [ngSwitch]="selectedTabIndex">
+      <div *ngSwitchCase="0">
+        <form [formGroup]="staffForm" class="form-content">
+          <div class="w-full  p-6">
+            <div class="flex gap-8">
+
+              <div class="2xl:[90%] lg:w-[80%] w-[70%]">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-800">Name <span
+                        class="text-red-500">*</span></label>
+                    <input type="text" formControlName="name"
+                      class="mt-2 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                      placeholder="Enter Name" />
+                    <div *ngIf="
+                    staffForm.get('name')?.invalid &&
+                    (staffForm.get('name')?.dirty ||
+                      staffForm.get('name')?.touched ||
+                      submitted)
+                  " class="text-xs mt-2 text-red-500">
+                      Name is required.
+                    </div>
+                  </div>
+
+                  <div class="relative +w-full">
+                    <label class="block text-sm font-medium text-gray-800">Gender <span
+                        class="text-red-500">*</span></label>
+                    <div
+                      class="mt-2 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                      (click)="showGenderDropdown = !showGenderDropdown">
+                      <span class="text-gray-800">{{ selectedGender || 'Select Gender' }}</span>
+
+                      <div
+                        class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                        <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                          [ngClass]="{'rotate-180': showGenderDropdown}" xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div *ngIf="showGenderDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                      <div *ngFor="let gender of genderOptions" (click)="selectGender(gender)"
+                        class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                        {{ gender }}
+                      </div>
+                    </div>
+                    <div *ngIf="
+                    staffForm.get('gender')?.invalid &&
+                    (staffForm.get('gender')?.dirty ||
+                      staffForm.get('gender')?.touched ||
+                      submitted)
+                  " class="text-xs mt-2 text-red-500">
+                      Gender is required .
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-800">Mobile Number <span
+                        class="text-red-500">*</span></label>
+                    <input type="tel" formControlName="mobileNumber" (input)="onPhoneInput($event)"
+                      (keypress)="allowOnlyValidPhoneDigits($event)" (paste)="blockInvalidPhonePaste($event)"
+                      class="mt-2 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                      placeholder="Enter Mobile Number" minlength="10" maxlength="10" />
+                    <div *ngIf="
+                    staffForm.get('mobileNumber')?.invalid &&
+                    (staffForm.get('mobileNumber')?.dirty ||
+                      staffForm.get('mobileNumber')?.touched ||
+                      submitted)
+                  " class="text-xs mt-2 text-red-500">
+                      Mobile number is required and must be exactly 10 digits.
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-800">Email ID <span
+                        class="text-red-500">*</span></label>
+                    <input type="email" formControlName="emailId"
+                      class="mt-2 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                      placeholder="Enter Email ID" />
+                    <div *ngIf="
+                    staffForm.get('emailId')?.invalid &&
+                    (staffForm.get('emailId')?.dirty ||
+                      staffForm.get('emailId')?.touched ||
+                      submitted)
+                  " class="text-xs mt-2 text-red-500">
+                      Please enter a valid email address.
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-800">Father's Name</label>
+                    <input type="text" formControlName="fatherName"
+                      class="mt-2 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                      placeholder="Enter Father's Name" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-800">Alternate Number</label>
+                    <input type="tel" formControlName="alternateNumber"
+                      class="mt-2 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                      placeholder="Enter Alternate Number" />
+                  </div>
+                  <div>
+                    <div class="relative w-full ">
+                      <label class="block text-sm font-medium text-gray-800">Blood Group</label>
+                      <div
+                        class="mt-2 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                        (click)="showBloodGroupDropdown = !showBloodGroupDropdown">
+                        <span class="text-gray-800">
+                          {{ staffForm.get('bloodGroup')?.value || 'Select Blood Group' }}
+                        </span>
+                        <div
+                          class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                          <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': showBloodGroupDropdown}" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div *ngIf="showBloodGroupDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                  max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                        <div *ngFor="let blood of bloodGroupOptions" (click)="selectBloodGroup(blood)"
+                          class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                          {{ blood }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="relative w-full">
+                      <label class="block text-sm font-medium text-gray-800">
+                        Marital Status <span class="text-red-500">*</span>
+                      </label>
+                      <div
+                        class="mt-2 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                        (click)="showMaritalStatusDropdown = !showMaritalStatusDropdown">
+                        <span class="text-gray-800">
+                          {{ staffForm.get('maritalStatus')?.value || 'Select Marital Status' }}
+                        </span>
+
+                        <div
+                          class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                          <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': showMaritalStatusDropdown}" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div *ngIf="showMaritalStatusDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                  max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                        <div *ngFor="let status of maritalStatusOptions" (click)="selectMaritalStatus(status)"
+                          class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                          {{ status}}
+                        </div>
+                      </div>
+
+                      <div
+                        *ngIf="staffForm.get('maritalStatus')?.invalid && (staffForm.get('maritalStatus')?.dirty || staffForm.get('maritalStatus')?.touched || submitted)"
+                        class="text-xs mt-2 text-red-500">
+                        Marital Status is required.
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Address Tabs -->
+                <div class="mt-8">
+                  <div class="flex gap-0">
+                    <button (click)="toggleAddress('current')" [ngClass]="{
+                      'bg-black text-white': showCurrentAddress,
+                      'bg-white text-black': !showCurrentAddress
+                    }" class="px-4 py-2">
+                      Current Address
+                    </button>
+                    <button (click)="toggleAddress('permanent')" [ngClass]="{
+                      'bg-black text-white': !showCurrentAddress,
+                      'bg-white text-black': showCurrentAddress
+                    }" class="px-4 py-2">
+                      Permanent Address
+                    </button>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" *ngIf="showCurrentAddress">
+                    <!-- Country -->
+                    <div>
+                      <div class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-800">Country</label>
+                        <div
+                          class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                    rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer relative">
+
+                          <input type="text" [formControl]="countryFilterCtrl"
+                            class="w-full bg-transparent border-none outline-none placeholder-gray-500"
+                            placeholder="Select Country" (focus)="showCountryDropdown = true"
+                            (click)="$event.stopPropagation()" />
+                          <div
+                            class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full  border border-white cursor-pointer"
+                            (click)="showCountryDropdown = !showCountryDropdown">
+
+                            <svg class="h-4 w-4  text-gray-600 transition-transform duration-200"
+                              [ngClass]="{'rotate-180': showCountryDropdown}" xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        <!-- Dropdown Options -->
+                        <div *ngIf="showCountryDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+          max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+
+                          <!-- Loading State -->
+                          <div *ngIf="isLoadingCountries" class="text-sm p-2 text-gray-600">
+                            <span>Loading countries...</span>
+                          </div>
+
+                          <!-- Country List -->
+                          <div *ngFor="let country of filteredCountries | async" (click)="onCountryChange(country)"
+                            class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                            {{ country.name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- State -->
+                    <div>
+                      <div class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-800">State</label>
+                        <div
+                          class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+        rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                          (click)="toggleStateDropdown()">
+                          <input type="text" [formControl]="stateFilterCtrl"
+                            class="bg-transparent w-full outline-none cursor-pointer" placeholder="Select State"
+                            (focus)="showStateDropdown = true" (click)="$event.stopPropagation()" />
+
+                          <div
+                            class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full border border-white cursor-pointer">
+                            <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                              [ngClass]="{'rotate-180': showStateDropdown}" xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div *ngIf="showStateDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+        max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                          <div *ngIf="isLoadingStates" class="text-sm p-2 text-gray-600">
+                            <span>Loading states...</span>
+                          </div>
+                          <div *ngFor="let state of filteredStates | async" (click)="onStateChange(state)"
+                            class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                            {{ state.name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- City -->
+                    <div>
+                      <div class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-800">City</label>
+                        <div
+                          class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+        rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                          (click)="toggleCityDropdown()">
+                          <input type="text" [formControl]="cityFilterCtrl"
+                            class="bg-transparent w-full outline-none cursor-pointer" placeholder="Select City"
+                            (focus)="showCityDropdown = true" (click)="$event.stopPropagation()" />
+
+                          <div
+                            class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full border border-white cursor-pointer">
+                            <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                              [ngClass]="{'rotate-180': showCityDropdown}" xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div *ngIf="showCityDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+        max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                          <div *ngIf="isLoadingCities" class="text-sm p-2 text-gray-600">
+                            <span>Loading cities...</span>
+                          </div>
+                          <div *ngFor="let city of filteredCities | async" (click)="onCityChange(city)"
+                            class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                            {{ city.name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-800">Address</label>
+                      <textarea type="text" formControlName="addressLine1"
+                        class="mt-2 w-full bg-transparent border border-gray-800 rounded-2xl p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                        placeholder="Enter Full Address "> </textarea>
+                      <!-- <div *ngIf="
+                      staffForm.get('addressLine1')?.invalid &&
+                      (staffForm.get('addressLine1')?.dirty ||
+                        staffForm.get('addressLine1')?.touched ||
+                        submitted)
+                    " class="text-xs mt-2 text-red-500">
+                        Address is required.
+                      </div> -->
+                    </div>
+
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" *ngIf="!showCurrentAddress">
+                    <div>
+                      <div class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-800">Country</label>
+                        <div
+                          class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                      rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer relative">
+                          <input type="text" [formControl]="secCountryFilterCtrl"
+                            class="w-full bg-transparent border-none outline-none placeholder-gray-500"
+                            placeholder="Select Country" (focus)="showSecCountryDropdown = true"
+                            (click)="$event.stopPropagation()" />
+
+                          <div
+                            class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full  border border-white cursor-pointer"
+                            (click)="showSecCountryDropdown = !showSecCountryDropdown">
+
+                            <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                              [ngClass]="{'rotate-180': showSecCountryDropdown}" xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div *ngIf="showSecCountryDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                    max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                          <div *ngIf="isLoadingCountries" class="text-sm p-2 text-gray-600">
+                            <span>Loading countries...</span>
+                          </div>
+                          <div *ngFor="let country of filteredSecCountries | async"
+                            (click)="onSecCountryChange(country)"
+                            class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                            {{ country.name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- State -->
+                    <div class="relative w-full">
+                      <label class="block text-sm font-medium text-gray-800">State</label>
+                      <div
+                        class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                    rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                        (click)="toggleSecStateDropdown()">
+                        <input type="text" [formControl]="secStateFilterCtrl"
+                          class="bg-transparent w-full outline-none cursor-pointer" placeholder="Select State"
+                          (focus)="showSecStateDropdown = true" (click)="$event.stopPropagation()" />
+
+                        <div
+                          class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full  border border-white cursor-pointer">
+
+                          <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': showSecStateDropdown}" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div *ngIf="showSecStateDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                  max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                        <div *ngIf="isLoadingStates" class="text-sm p-2 text-gray-600">
+                          <span>Loading states...</span>
+                        </div>
+                        <div *ngFor="let state of filteredSecStates | async" (click)="onSecStateChange(state)"
+                          class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                          {{ state.name }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- City -->
+                    <div class="relative w-full">
+                      <label class="block text-sm font-medium text-gray-800">City</label>
+                      <div
+                        class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                    rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                        (click)="toggleSecCityDropdown()">
+                        <input type="text" [formControl]="secCityFilterCtrl"
+                          class="bg-transparent w-full outline-none cursor-pointer" placeholder="Select City"
+                          (focus)="showSecCityDropdown = true" (click)="$event.stopPropagation()" />
+
+                        <div
+                          class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full  border border-white cursor-pointer">
+
+                          <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': showSecCityDropdown}" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div *ngIf="showSecCityDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                  max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                        <div *ngIf="isLoadingCities" class="text-sm p-2 text-gray-600">
+                          <span>Loading cities...</span>
+                        </div>
+                        <div *ngFor="let city of filteredSecCities | async" (click)="onSecCityChange(city)"
+                          class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                          {{ city.name }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-800">Address<span
+                          class="text-red-500">*</span></label>
+                      <textarea type="text" formControlName="addressLine2"
+                        class="mt-2 w-full bg-transparent border border-gray-800 rounded-2xl p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                        placeholder="Enter Full Address "> </textarea>
+                      <div *ngIf="
+                      staffForm.get('addressLine2')?.invalid &&
+                      (staffForm.get('addressLine2')?.dirty ||
+                        staffForm.get('addressLine2')?.touched ||
+                        submitted)
+                    " class="text-xs mt-2 text-red-500">
+                        Address is required.
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- Emergency Contact Tabs -->
+                <div class="mt-8">
+                  <div class="flex gap-0">
+                    <button class="px-4 py-2" [ngClass]="{
+                    'bg-black text-white': activeEmergencyContact === 1,
+                    'bg-white': activeEmergencyContact !== 1
+                  }" (click)="activeEmergencyContact = 1">
+                      Emergency Contact 01
+                    </button>
+                    <button class="px-4 py-2" [ngClass]="{
+                    'bg-black text-white': activeEmergencyContact === 2,
+                    'bg-white': activeEmergencyContact !== 2
+                  }" (click)="activeEmergencyContact = 2">
+                      Emergency Contact 02
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" *ngIf="activeEmergencyContact === 1">
+
+                    <!-- Contact Name -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-800">Contact Name</label>
+                      <input type="text" formControlName="emergencyContact1Name"
+                        class="mt-2 mb-4 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                        placeholder="Enter Name" />
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-800">Mobile Number</label>
+                      <input type="tel" formControlName="emergencyContact1Number"
+                        class="mt-2 mb-4 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                        placeholder="Enter Mobile Number" />
+                    </div>
+                    <!-- Relationship -->
+                    <div>
+                      <div class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-800">
+                          Relationship
+                        </label>
+
+                        <div
+                          class="mt-2 mb-4 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                          (click)="showEmergencyContactDropdown1 = !showEmergencyContactDropdown1">
+                          <span class="text-gray-800">
+                            {{ staffForm.get('emergencyContact1Relationship1')?.value || 'Select Relationship' }}
+                          </span>
+
+                          <div
+                            class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                            <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                              [ngClass]="{'rotate-180': showEmergencyContactDropdown1}"
+                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        <div *ngIf="showEmergencyContactDropdown1" class="absolute left-0 w-full bottom-[calc(100%+-28px)] bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                    max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                          <div *ngFor="let relationship of emergencyContactOptions"
+                            (click)="selectEmergencyContact1(relationship)"
+                            class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                            {{ relationship.label }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6" *ngIf="activeEmergencyContact === 2">
+
+                    <!-- Contact Name -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-800">Contact Name</label>
+                      <input type="text" formControlName="emergencyContact2Name"
+                        class="mt-2 mb-4 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                        placeholder="Enter Name" />
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div>
+                      <label class="block text-sm font-medium text-gray-800">Mobile Number</label>
+                      <input type="tel" formControlName="emergencyContact2Number"
+                        class="mt-2 mb-4 w-full bg-transparent border border-gray-800 rounded-full p-3 placeholder-gray-500 text-sm focus:ring-gray-900 focus:outline-none focus:border-black"
+                        placeholder="Enter Mobile Number" />
+                    </div>
+                    <!-- Relationship -->
+                    <div>
+                      <div class="relative w-full">
+                        <label class="block text-sm font-medium text-gray-800">
+                          Relationship
+                        </label>
+
+                        <div
+                          class="mt-2 mb-4 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                          (click)="showEmergencyContactDropdown = !showEmergencyContactDropdown">
+                          <span class="text-gray-800">
+                            {{ staffForm.get('emergencyContact2Relationship')?.value || 'Select Relationship' }}
+                          </span>
+
+                          <div
+                            class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                            <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                              [ngClass]="{'rotate-180': showEmergencyContactDropdown}"
+                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        <div *ngIf="showEmergencyContactDropdown" class="absolute left-0 w-full bottom-[calc(100%+-28px)] bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                    max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                          <div *ngFor="let relationship of emergencyContactOptions"
+                            (click)="selectEmergencyContact(relationship)"
+                            class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                            {{ relationship.label }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-1 items-start justify-start ">
+                <div class="col-span-1 sm:col-span-1 ">
+                  <label class="block text-xl text-center  font-medium text-gray-800">Profile Image</label>
+                  <div
+                    class="mt-2 w-full bg-transparent flex justify-center text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer">
+                    <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" #fileInput />
+
+                    <div (click)="fileInput.click()" class="cursor-pointer flex items-center justify-center">
+                      <img [src]="selectedImage || '../../../../assets/New-Icons/image 2.svg'" alt="Profile Image"
+                        class="w-100 h-100" />
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="flex justify-end mt-8 sm:mt-12">
+              <button type="button"
+                class="text-black px-6 py-2 rounded-full text-sm font-medium mr-2 bg-[#ffff] transition duration-300"
+                (click)="goToListPage()">
+                Cancel
+              </button>
+              <button (click)="goToEmploymentTab()"
+                class="text-white px-6 py-2 rounded-full text-sm font-medium bg-[#000] transition duration-300">
+                Next
+              </button>
+            </div>
+            <!-- Buttons -->
+            <!-- <div class="flex justify-end gap-4 mt-8">
+              <button class="text-black  bg-white border border-gray-300 hover:bg-gray-100 px-6 py-2 rounded-full text-sm font-medium mr-2 transition duration-300"  (click)="goToListPage()">Cancel</button>
+              <button class="text-white bg-black hover:bg-gray-900 px-6 py-2 rounded-full text-sm font-medium transition duration-300" (click)="goToEmploymentTab()">Next</button>
+            </div> -->
+          </div>
+        </form>
+      </div>
+      <div *ngSwitchCase="1">
+
+        <form [formGroup]="staffForm" class="form-content w-full">
+          <div class="w-full  p-6">
+            <!-- Employment Info Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Date of Joining -->
+              <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Date of Joining <span
+                    class="text-red-500">*</span></label>
+                <div class="relative">
+                  <input type="date" #hiddenDateInput formControlName="dateOfJoining"
+                    (change)="updateDateDisplay(hiddenDateInput.value)"
+                    class="absolute inset-0 w-full h-full  bg-transparent opacity-0 cursor-pointer z-10" />
+
+                  <input type="text" [value]="formattedDate" readonly
+                    class="w-full  bg-transparent border border-gray-300 rounded-full p-3 pl-10 pr-12 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="Select Date" />
+
+                  <button type="button" class="absolute right-5 top-1/2 transform -translate-y-1/2 z-20"
+                    (click)="openDatePicker(hiddenDateInput)">
+                    <img src="../../../../assets/New-Icons/datepicker.svg" alt="Calendar" class="h-5 w-5" />
+                  </button>
+                </div>
+                <!-- <div
+                  *ngIf="staffForm.get('dateOfJoining')?.invalid && (staffForm.get('dateOfJoining')?.touched || submitted)"
+                  class="text-xs text-red-500 mt-2">
+                  Date of Joining is required.
+                </div> -->
+                <div
+                  *ngIf="staffForm.get('dateOfJoining')?.invalid && (staffForm.get('dateOfJoining')?.touched || submitted)"
+                  class="text-xs text-red-500 mt-2">
+                  Date of Joining is required.
+                </div>
+              </div>
+
+
+              <!-- Department Dropdown -->
+              <!-- <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Department <span
+                    class="text-red-500">*</span></label>
+                <div class="relative">
+                  <div (click)="showGenderDropdown = !showGenderDropdown"
+                    class="w-full  bg-transparent border border-gray-300 rounded-full p-3 flex justify-between items-center text-sm cursor-pointer">
+                    <span class="text-gray-800">{{ selectedGender || 'Select Department' }}</span>
+                    <svg class="w-4 h-4 text-gray-500 transform transition-transform duration-200"
+                      [ngClass]="{'rotate-180': showGenderDropdown}" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414L10 13.414l-4.707-4.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div *ngIf="showGenderDropdown"
+                    class="absolute z-50 w-full mt-2  bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto custom-scrollbar">
+                    <div *ngFor="let gender of genderOptions" (click)="selectGender(gender)"
+                      class="px-4 py-2 hover:bg-black hover:text-white cursor-pointer text-sm">
+                      {{ gender }}
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="relative w-full ">
+                <label class="block text-sm font-medium text-gray-800">Department</label>
+                <div
+                  class="mt-2 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                  (click)="showDepartmentDropdown = !showDepartmentDropdown">
+                  <span class="text-gray-800">
+                    {{ staffForm.get('department')?.value || 'Select Department' }}
+                  </span>
+                  <div class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                    <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                      [ngClass]="{'rotate-180': showDepartmentDropdown}" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="showDepartmentDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+            max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                  <div *ngFor="let department of departmentOptions" (click)="selectDepartment(department)"
+                    class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                    {{ department }}
+                  </div>
+                </div>
+              </div> -->
+
+              <!-- Designation -->
+              <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Department</label>
+                <input type="text" formControlName="department"
+                  class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="Enter department" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Designation</label>
+                <input type="text" formControlName="designation"
+                  class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="Enter Designation" />
+              </div>
+
+              <!-- Role -->
+              <!-- <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Role</label>
+                <input type="text" formControlName="role"
+                  class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="Enter Role" />
+              </div> -->
+
+              <div class="relative +w-full">
+                <label class="block text-sm font-medium text-gray-800">Role <span class="text-red-500">*</span></label>
+                <div
+                  class="mt-2 w-full bg-transparent border border-gray-800 flex items-center justify-between rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer"
+                  (click)="showRoleDropdown = !showRoleDropdown">
+                  <span class="text-gray-800">{{ selectedRole || 'Select Role' }}</span>
+
+                  <div class="h-8 w-8 flex items-center justify-center bg-white/50 rounded-full  border border-white">
+                    <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                      [ngClass]="{'rotate-180': showRoleDropdown}" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="showRoleDropdown" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                  <div *ngFor="let role of roleOptions" (click)="selectRole(role)"
+                    class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                    {{ role }}
+                  </div>
+                </div>
+                <div *ngIf="
+                    staffForm.get('role')?.invalid &&
+                    (staffForm.get('role')?.dirty ||
+                      staffForm.get('role')?.touched ||
+                      submitted)
+                  " class="text-xs mt-2 text-red-500">
+                  Role is required .
+                </div>
+              </div>
+
+              <!-- Official Email -->
+              <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Official Email ID <span
+                    class="text-red-500">*</span></label>
+                <input type="email" formControlName="officialEmailId"
+                  class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="Enter Official Email ID" />
+                <div
+                  *ngIf="staffForm.get('officialEmailId')?.invalid && (staffForm.get('officialEmailId')?.touched || submitted)"
+                  class="text-xs text-red-500 mt-2">
+                  Please enter a valid email address.
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Password</label>
+                <input type="password" formControlName="password"
+                  class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="Enter Password" />
+              </div>
+              <!-- <div>
+                <label class="block text-sm font-medium text-gray-800 mb-1">Report To</label>
+                <input type="text" formControlName="reportTo"
+                  class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                  placeholder="Enter Report" />
+              </div> -->
+
+              <!-- Report To Dropdown -->
+              <div class="relative w-full">
+                <label class="block text-sm font-medium text-gray-800 mb-1">Report To</label>
+                <div
+                  class="mt-2 w-full bg-transparent border border-gray-800 flex justify-between items-center 
+                  rounded-full pl-3.5 pr-3.5 pt-[0.580rem] pb-[0.580rem] text-sm text-sm focus:ring-gray-900 focus:outline-none focus:border-black cursor-pointer relative">
+                  <input type="text" [formControl]="reportFilterCtrl"
+                    class="w-full bg-transparent border-none outline-none placeholder-gray-500"
+                    placeholder="Select Report To" (focus)="isReportDropdownOpen = true"
+                    (click)="$event.stopPropagation()" />
+                  <div
+                    class="h-8 w-9 flex items-center justify-center bg-white/50 rounded-full border border-white cursor-pointer"
+                    (click)="toggleReportDropdownSearch()">
+                    <svg class="h-4 w-4 text-gray-600 transition-transform duration-200"
+                      [ngClass]="{'rotate-180': isReportDropdownOpen}" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Dropdown Options -->
+                <div *ngIf="isReportDropdownOpen" class="absolute left-0 w-full bg-gradient-to-b from-gray-100 to-white shadow-lg rounded-2xl  
+                max-h-[200px] overflow-y-auto custom-scrollbar z-50 p-1 mt-1">
+                  <!-- Report User List -->
+                  <div *ngFor="let user of filteredReportUsersObservable | async" (click)="onReportUserChange(user)"
+                    class="px-4 py-3 cursor-pointer text-sm rounded-md mx-2 my-1 hover:bg-black hover:text-white">
+                    {{ user.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="mt-10">
+              <h3 class="text-lg font-semibold text-black mb-4">Education Information</h3>
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-800 mb-1">UG</label>
+                  <input type="text" formControlName="ug"
+                    class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="UG" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-800 mb-1">PG</label>
+                  <input type="text" formControlName="pg"
+                    class="w-full  bg-transparent border border-gray-300 rounded-full p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="PG" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end mt-8 sm:mt-12">
+              <button type="button"
+                class="text-black px-6 py-2 rounded-full text-sm font-medium mr-2 bg-white transition duration-300">
+                Previous
+              </button>
+              <button type="submit" (click)="onSubmit()"
+                class="text-white px-6 py-2 rounded-full text-sm font-medium bg-black transition duration-300">
+                Save
+              </button>
+            </div>
+            <!-- <div class="flex justify-end mt-10">
+              <button 
+                class="text-black  bg-white border border-gray-300 hover:bg-gray-100 px-6 py-2 rounded-full text-sm font-medium mr-2 transition duration-300">
+                Previous
+              </button>
+              <button type="submit" (click)="onSubmit()"
+                class="text-white bg-black hover:bg-gray-900 px-6 py-2 rounded-full text-sm font-medium transition duration-300">
+                Save
+              </button>
+            </div> -->
+          </div>
+        </form>
+      </div>
+    </ng-container>
+  </div>

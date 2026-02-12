@@ -1,0 +1,210 @@
+<div *ngIf="isLoading; else content">
+  <div class="animate-pulse">
+    <div class="p-4 rounded-lg bg-transparent">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 p-3">
+        <div class="flex flex-row items-center justify-between w-full md:w-auto md:flex-none">
+          <div class="bg-gray-300 h-8 w-48 rounded-full"></div>
+          <button class="md:hidden bg-gray-300 h-10 w-24 rounded-full"></button>
+        </div>
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+          <div class="flex flex-row items-center gap-2 w-full md:w-auto">
+            <div class="relative w-full md:w-48">
+              <div class="bg-gray-300 h-10 w-full rounded-full"></div>
+            </div>
+            <button class="bg-gray-300 h-10 w-10 rounded-full"></button>
+            <button class="bg-gray-300 h-10 w-28 rounded-full"></button>
+            <div class="relative w-full md:w-auto">
+              <button class="bg-gray-300 h-10 w-28 rounded-full"></button>
+            </div>
+          </div>
+          <button class="hidden md:flex bg-gray-300 h-10 w-28 rounded-full"></button>
+        </div>
+      </div>
+      <div
+        class="rounded-2xl border border-white p-4 shadow-[0px_3.83px_3.83px_0px_#D1E1FF14] backdrop-blur-[382.83px] bg-[#FFFFFF4D]">
+        <div class="overflow-x-auto">
+          <table class="w-full bg-transparent hidden lg:table">
+            <thead>
+              <tr>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-16 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-48 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </th>
+                <th class="py-2">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]">
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-8 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-48 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+                <td class="py-3.5">
+                  <div class="bg-gray-300 h-4 w-24 rounded-full"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lg:hidden">
+            <div *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"
+              class="rounded-lg p-2 mb-2">
+              <div class="flex justify-between items-center w-full">
+                <div class="flex items-center gap-2">
+                  <div class="bg-gray-300 h-4 w-32 rounded-full"></div>
+                  <div class="bg-gray-300 h-4 w-16 rounded-full"></div>
+                </div>
+                <div class="bg-gray-300 h-4 w-8 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content>
+  <div class="p-4 rounded-lg bg-transparent">
+    <div class=" flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 p-3">
+      <div class="flex flex-row items-center justify-between w-full md:w-auto md:flex-none">
+        <div class="text-3xl font-semibold leading-10 text-left">Staff</div>
+        <button
+          class="md:hidden flex items-center justify-center border border-white bg-white bg-opacity-50 rounded-[107px] px-3 py-2.5 text-sm font-medium leading-4 text-center hover:bg-opacity-70 transition-all"
+          (click)="addStaff()">
+          <img src="assets/lead/Add (1).svg" class="ml-2" alt="Add Icon">
+          <div class="pt-0.5 pl-1.5">Add Staff</div>
+        </button>
+      </div>
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+        <button
+          class=" hidden md:flex items-center justify-center border border-white bg-white bg-opacity-50 rounded-[107px] px-4 py-2.5 text-sm font-medium leading-4 text-center hover:bg-opacity-70 transition-all"
+          (click)="addStaff()">
+          <img src="assets/lead/Add (1).svg" alt="Add Icon">
+          <div class="pt-0.5 pl-1.5">Add Staff</div>
+        </button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white p-3 sm:p-3 md:p-3 lg:p-4 xl:p-4 xxl:p-4   shadow-[0px_3.83px_3.83px_0px_#D1E1FF14] 
+            backdrop-blur-[382.83px] 
+            border border-transparent 
+            bg-[#FFFFFF4D] 
+            [border-image-source:linear-gradient(107.21deg,#FFFFFF_-0.65%,#FFFFFF_93.23%)] 
+            [border-image-slice:1]">
+      <div class="table-wrapper overflow-x-auto">
+        <table class="w-full bg-transparent shadow-none rounded-lg overflow-hidden hidden lg:table" *ngIf="!isLoading">
+          <thead>
+            <tr>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Staff ID</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Staff Name</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Mobile Number</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Email</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Designation</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Department</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Date of joining</th>
+              <th class=" text-base font-[600] text-left text-[#1C0D0D] py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let staff of dataSource.data" (click)="viewStaff(staff?.staff_id)">
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.staff_id }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.name }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.mobile_number }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.email_id }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.Designation }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.Department }}</td>
+              <td class="py-3.5  font-[400] text-sm text-[#1C0D0D] cursor-pointer">{{ staff.date_of_joining }}</td>
+              <td class="py-3.5  font-[400]  text-sm text-[#1C0D0D] cursor-pointer">
+                <span [ngClass]="getStatusClass(staff.status)"
+                  class="px-4 py-2 rounded-full text-xs font-bold transition-colors duration-300">
+                  {{ toTitleCase(staff.status) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="lg:hidden" *ngIf="!isLoading">
+          <div *ngFor="let staff of dataSource.data" class=" rounded-lg  p-2 mb-2">
+            <div (click)="toggleDetails(staff)" class="cursor-pointer flex justify-between items-center w-full">
+              <div class="flex items-center">
+                <div class=" text-sm text-[#1C0D0D] pe-2"> {{ staff.name }} </div> -
+                <div class=" text-sm text-[#1C0D0D] ps-2"> ( {{ staff.staff_id }} )</div>
+              </div>
+              <div class="text-right"> <!-- This will work properly now -->
+                <svg *ngIf="!staff.showDetails" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                </svg>
+                <svg *ngIf="staff.showDetails" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" />
+                </svg>
+              </div>
+            </div>
+            <div *ngIf="staff.showDetails" class="mt-2" (click)="viewStaff(staff?.staff_id)">
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Mobile Number:</strong> {{ staff.mobile_number }}</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Email:</strong> {{ staff.email_id }}</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Designation:</strong> {{ staff.Designation }}</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Department:</strong> {{ staff.Department }}</div>
+              <div class=" text-sm text-[#1C0D0D] py-2"><strong>Date of Joining:</strong> {{ staff.date_of_joining }}
+              </div>
+              <div class=" text-sm text-[#1C0D0D] py-2 ">
+                <strong>Status:</strong>
+                <span [ngClass]="getStatusClass(staff.status)"
+                  class="status-label px-3 py-2 ml-2 rounded-full text-xs font-bold transition-colors duration-300">
+                  {{ toTitleCase(staff.status) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-pagination *ngIf="totalCount >= pageSize && !isLoading" [totalCount]="totalCount" [pageSize]="pageSize"
+          [pageIndex]="pageIndex" [totalPages]="totalPages" (pageChange)="onPageChange($event)"></app-pagination>
+        <app-data-loading-bar [columns]="displayedColumns" *ngIf="isLoading"></app-data-loading-bar>
+
+      </div>
+    </div>
+  </div>
+</ng-template>

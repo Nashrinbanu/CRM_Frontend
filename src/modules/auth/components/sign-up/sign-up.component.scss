@@ -1,0 +1,9 @@
+  ::ng-deep .custom-form-field .mdc-text-field--outlined {
+    --mdc-outlined-text-field-container-shape: 24px !important;
+  }
+
+  ::ng-deep .custom-form-field .mdc-notched-outline {
+    position: absolute;
+    top: 6px;
+    height: 80%;
+  }

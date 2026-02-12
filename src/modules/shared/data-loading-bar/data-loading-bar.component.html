@@ -1,0 +1,23 @@
+<div class="row m-0 mt-4">
+  <div class="col-12 overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr>
+          <th *ngFor="let column of columns" class="p-2 text-left font-medium text-gray-700 bg-transparent">
+            <div class="animate-pulse bg-gray-300 h-6 w-28 "></div>
+          </th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr *ngFor="let i of [].constructor(10)">
+          <td *ngFor="let column of columns" class="p-2">
+            <div class="animate-pulse bg-gray-300 h-9 w-full "></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
