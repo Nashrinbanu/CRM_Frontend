@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabLink, MatTabsModule } from '@angular/material/tabs';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+// import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
@@ -61,7 +61,6 @@ export class OrderByPinnedPipe implements PipeTransform {
     MatRadioModule,
     MatMenuModule,
     MatTabsModule,
-    AngularEditorModule,
     ReactiveFormsModule,
     MatCheckboxModule,
     FormsModule,

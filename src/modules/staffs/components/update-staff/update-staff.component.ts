@@ -33,7 +33,7 @@ import { MatRadioModule } from '@angular/material/radio';
 // import { LeadsService } from '../../services/leads.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+// import { AngularEditorModule } from '@kolkov/angular-editor';
 // import { ActivityComponent } from '../activity/activity.component';
 import { MatChipsModule } from '@angular/material/chips';
 import {
@@ -67,7 +67,6 @@ import { Observable, startWith, map } from 'rxjs';
     MatRadioModule,
     MatMenuModule,
     MatTabsModule,
-    AngularEditorModule,
     // ActivityComponent,
     MatChipsModule,
     MatIconModule,
